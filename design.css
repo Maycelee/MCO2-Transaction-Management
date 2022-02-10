@@ -1,0 +1,106 @@
+@import url('https://fonts.googleapis.com/css2?family=Assistant:wght@200;300;400;500;600;700;800&display=swap');
+
+body {
+    background-color: #121212;
+}
+
+a {
+    color: inherit;
+    text-decoration: none;
+}
+
+#page-header {
+    align-content: center;
+}
+
+#website-title { /*<h1>*/
+    display: inline;
+    text-align: center;
+    margin-left: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #F5C518;
+    border-radius: 5px;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 800;
+    font-size: 80px;
+    color: black;
+}
+
+#search-box { /*<div>*/
+    margin: 10px;
+    border: 1px;
+    border-style: solid;
+    border-radius: 5px;
+    border-color: black;
+    background-color: white;
+}
+
+#text-search {
+    margin: 0px;
+    padding: 8px;
+    border-radius: 5px 5px 0px 0px;
+    background-color: #F5C518;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 700;
+    font-size: x-large;
+}
+
+#search-form {
+    margin: 10px;
+    text-align: center;
+}
+
+.form-box {
+    height: 30px;
+    font-family: 'Assistant', sans-serif;
+    font-size: medium;
+    align-items: center;
+}
+
+#movie-id {
+    width: 50px;
+}
+
+#movie-name {
+    width: 400px;
+}
+
+#movie-year, #movie-rank {
+    width: 100px;
+}
+
+#search-button {
+    height: 30px;
+    background-color: #F5C518;
+    border-radius: 5px;
+    border-color: #121212;
+    text-decoration: none;
+    font-weight: 700;
+    transition-duration: 0.4s;
+}
+
+#search-button:hover {
+    background-color: #121212;
+    color: white;
+}
+
+#text-results {
+    margin: 0px;
+    padding: 8px;
+    border-radius: 5px 5px 0px 0px;
+    background-color: #F5C518;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 700;
+    font-size: x-large;
+}
+
+#results-box {
+    visibility: hidden;
+    margin: 10px;
+    border: 1px;
+    border-style: solid;
+    border-color: black;
+    border-radius: 5px;
+    background-color: white;
+}
