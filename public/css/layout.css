@@ -10,6 +10,12 @@ a {
     text-decoration: none;
 }
 
+textarea {
+    margin-bottom: 8px;
+    min-height: 100px;
+    min-width: 300px;
+}
+
 /*CLASS*/
 .interactive-buttons { /*<button>*/
     height: 35px;
@@ -25,6 +31,12 @@ a {
 .interactive-buttons:hover { /*<button>*/
     background-color: #121212;
     color: white;
+}
+
+.text-node {
+    margin: auto;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 700;
 }
 
 /*ID*/
@@ -63,6 +75,12 @@ a {
     font-size: x-large;
 }
 
+#form-isolation {
+    margin-bottom: 8px;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 500;
+}
+
 /*DIV*/
 #query-box {
     margin: 10px;
@@ -81,6 +99,18 @@ a {
     border-radius: 5px 5px 0px 0px;
     background-color: #F5C518;
     font-family: 'Assistant', sans-serif;
+}
+
+#div-form {
+    margin-top: 8px;
+    width: auto;
+    text-align: center;
+}
+
+#query-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
 #div-buttons {
