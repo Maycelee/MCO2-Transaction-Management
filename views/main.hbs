@@ -6,23 +6,26 @@
     <meta name="keyword" content="Java">
     <meta name="author" content="Manuel, Tang, Tee">
     <link rel="stylesheet" type="text/css" href="design.css">
+    <link rel="icon" type = "image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/c/cc/IMDb_Logo_Square.svg">
 </head>
 <body>
     <div id="page-header">
-        <p id="website-title"><a href="https://www.google.com/">IMDb</a></p>
+        <p id="website-title">IMDb</p>
     </div>
     
     <div id="search-box">
         <p id="text-search">Search</p>
-        <div>
+        <div id="div-form">
             <form id="search-form">
                 <input type="search" id="movie-id" class="form-box" name="movieid" placeholder="ID" autocomplete="off">
                 <input type="search" id="movie-name" class="form-box" name="moviename" placeholder="Name" autocomplete="off">
                 <input type="search" id="movie-year" class="form-box" name="movieyear" placeholder="Year" autocomplete="off">
                 <input type="search" id="movie-rank" class="form-box" name="movierank" placeholder="Rank" autocomplete="off">
-                <!--<input type="submit" id="search-button" name="submittbutton" value="Find">-->
             </form>
-            <button id="search-button">Find</button>
+        </div>
+        <div id="div-buttons">
+            <button id="search-button" class="interactive-buttons">Find</button>
+            <button id="generate-button" class="interactive-buttons">Generate</button>
         </div>
     </div>
     <div id="query-results">

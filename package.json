@@ -1,0 +1,23 @@
+{
+  "name": "mco2-transaction-management",
+  "version": "1.0.0",
+  "description": "The course project on Transactions Management is a venue for students to practice building a distributed database system that supports concurrent multi-user access.\r Students will once again use the IMDB_ijs dataset to design a three-node distributed database system where they perform concurrent transactions and simulate crash\r and recovery techniques. The final output will be a software that will be demonstrated during the indicated schedule to the respective STADVDB teachers, and a test\r script showing the results of performing the different test cases described below on your software.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Maycelee/MCO2-Transaction-Management.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Maycelee/MCO2-Transaction-Management/issues"
+  },
+  "homepage": "https://github.com/Maycelee/MCO2-Transaction-Management#readme",
+  "dependencies": {
+    "express": "^4.17.2",
+    "hbs": "^4.2.0"
+  }
+}
