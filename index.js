@@ -1,6 +1,7 @@
 const express = require('express');
 const hbs = require('hbs');
 const routes = require('./routes/routes.js');
+const db = require('./models/db.js');
 
 const app = express();
 const port = 9090;
@@ -17,5 +18,5 @@ app.use(function (req, res) {
 });
 
 app.listen(port, function () {
-    console.log('app listening at port ' + port);
+    console.log('Server is listening, access through localhost:' + port);
 });

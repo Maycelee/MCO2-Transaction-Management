@@ -5,51 +5,43 @@
     <meta name="description" content="Home page">
     <meta name="keyword" content="Java">
     <meta name="author" content="Manuel, Tang, Tee">
-    <link rel="stylesheet" type="text/css" href="design.css">
+    <link rel="stylesheet" type="text/css" href="/css/layout.css">
     <link rel="icon" type = "image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/c/cc/IMDb_Logo_Square.svg">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
+    <script src="/js/singlequery.js" type="text/javascript"></script>
 </head>
 <body>
-    <div id="page-header">
-        <p id="website-title">IMDb</p>
-    </div>
+    <p id="website-title">IMDb</p>
     
-    <div id="search-box">
-        <p id="text-search">Search</p>
-        <div id="div-form">
-            <form id="search-form">
-                <input type="search" id="movie-id" class="form-box" name="movieid" placeholder="ID" autocomplete="off">
-                <input type="search" id="movie-name" class="form-box" name="moviename" placeholder="Name" autocomplete="off">
-                <input type="search" id="movie-year" class="form-box" name="movieyear" placeholder="Year" autocomplete="off">
-                <input type="search" id="movie-rank" class="form-box" name="movierank" placeholder="Rank" autocomplete="off">
+    <!-- TRANSACTIONS -->
+    <div id="query-box">
+        <div id="div-pick">
+            <p id="text-transaction">Transaction | </p>
+            <form id="radio-transaction">
+                <input type="radio" id="radio-single" class="radio-query" name="query-count" value="Single">
+                <label for="radio-single">Single Query</label>
+                <input type="radio" id="radio-multi" class="radio-query" name="query-count" value="Multi">
+                <label for="radio-multi">Multiple Queries</label>
             </form>
         </div>
+        
+        <div id="div-form">
+            <form id="query-form">
+            </form>
+        </div>
+        
         <div id="div-buttons">
-            <button id="search-button" class="interactive-buttons">Find</button>
+            <button id="search-button" class="interactive-buttons" style="display: none;">Execute</button>
             <button id="generate-button" class="interactive-buttons">Generate</button>
         </div>
     </div>
+
+    <!-- DISPLAY -->
     <div id="query-results">
         <div id="results-box">
             <p id="text-results">Results</p>
         </div>
         
     </div>
-    <script type="text/javascript">
-        function click_fn() {
-            document.getElementById("results-box").style.visibility = 'visible';
-            var p2 = document.createElement("p");
-            p2.style.borderBottomStyle = 'solid';
-            p2.style.borderBottomWidth = '1px';
-            p2.style.borderBottomColor = 'gray';
-            p2.style.margin = '10px';
-            p2.style.padding = '5px';
-            var node = document.createTextNode("Boop");
-            p2.appendChild(node);
-            var element = document.getElementById("results-box");
-            element.appendChild(p2);
-        }
-        var button = document.getElementById("search-button");
-        button.onclick = click_fn;
-    </script>
 </body>
 </html>
