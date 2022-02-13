@@ -17,6 +17,12 @@ textarea {
 }
 
 /*CLASS*/
+.text-transaction { /*<p>*/
+    margin: 0px;
+    font-weight: 700;
+    font-size: x-large;
+}
+
 .interactive-buttons { /*<button>*/
     height: 35px;
     width: 100px;
@@ -54,15 +60,21 @@ textarea {
     color: black;
 }
 
-#text-transaction { /*<p>*/
-    margin: 0px;
-    font-weight: 700;
-    font-size: x-large;
-}
-
 #radio-transaction { /*<form>*/
+    position: relative;
     font-weight: 500;
     font-size: larger;
+}
+
+#form-limit {
+    position: absolute;
+    right: 28px;
+}
+
+#limit-quantity {
+    width: 80px;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 500;
 }
 
 #text-results { /*<p>*/
