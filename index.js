@@ -20,3 +20,5 @@ app.use(function (req, res) {
 app.listen(port, function () {
     console.log('Server is listening, access through localhost:' + port);
 });
+
+db.connect();

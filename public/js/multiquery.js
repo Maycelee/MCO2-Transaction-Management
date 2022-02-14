@@ -1,7 +1,7 @@
 $(document).ready(function () {
 	$("#radio-multi").click(function () {
         $(".text-transaction").html(
-            "<p class='text-transaction'><a onclick='window.location.href=this'>Clear |</a></p>"
+            "<p class='text-transaction'><a onclick='window.location.href=this'>Back |</a></p>"
         );
 
         $("#execute-button").show();

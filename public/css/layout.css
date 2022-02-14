@@ -45,6 +45,14 @@ textarea {
     font-weight: 700;
 }
 
+.form-generate {
+    margin-bottom: 8px;
+    width: 100px;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 500;
+    font-size: medium;
+}
+
 /*ID*/
 #website-title { /*<p>*/
     display: inline;
@@ -60,21 +68,23 @@ textarea {
     color: black;
 }
 
+#error-title {
+    width: fit-content;
+    text-align: center;
+    margin: auto;
+    padding-left: 20px;
+    padding-right: 20px;
+    background-color: #F5C518;
+    border-radius: 5px;
+    font-family: 'Assistant', sans-serif;
+    font-weight: 600;
+    font-size: x-large;
+    color: black;
+}
+
 #radio-transaction { /*<form>*/
-    position: relative;
     font-weight: 500;
     font-size: larger;
-}
-
-#form-limit {
-    position: absolute;
-    right: 28px;
-}
-
-#limit-quantity {
-    width: 80px;
-    font-family: 'Assistant', sans-serif;
-    font-weight: 500;
 }
 
 #text-results { /*<p>*/
@@ -91,6 +101,7 @@ textarea {
     margin-bottom: 8px;
     font-family: 'Assistant', sans-serif;
     font-weight: 500;
+    font-size: medium;
 }
 
 /*DIV*/
