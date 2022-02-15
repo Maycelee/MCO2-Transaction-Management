@@ -14,7 +14,8 @@ const node1 = mysql.createPool({
     database: 'moviesmain',
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    rowsAsArray: true
 });
 
 const node2 = mysql.createPool({
@@ -119,8 +120,57 @@ const database = {
 
     //update recently reconnected node
     recover: function(status){
+        var ping = require('ping');
+        var query;
         if(status[0] == 1){
             console.log("Entered Node 1 Recovery");
+            /*           
+            ping.sys.probe(ip2, function(active){
+                //var info = active ? 'IP ' + host + ' = Active' : 'IP ' + host + ' = Non-Active';
+                if(active == 1){
+                    query = "DELETE movies FROM movies WHERE movies.year < 1980";
+                    node1.query(query,
+                        function (err, result, fields) {
+                        if (err) throw err;
+                        
+                    });
+                    query = "SELECT * FROM movies";
+                    node2.query( query,  
+                        function (err, result, fields) {
+                            result.forEach( function(object){
+                                var query2 = "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + object.id + ", \"" + object.name + "\"," + object.year + ", " + object.rank + ")"
+                                node1.query(query2,
+                                    function (err, result, fields) {
+                                    if (err) throw err;
+                                    
+                                });
+                            })
+                        }
+                    )
+                }
+            });
+            ping.sys.probe(ip3, function(active){
+                //var info = active ? 'IP ' + host + ' = Active' : 'IP ' + host + ' = Non-Active';
+                if(active == 1){
+                    query = "DELETE movies FROM movies WHERE movies.year >= 1980";
+                    node1.query(query,
+                        function (err, result, fields) {
+                        if (err) throw err;
+                    });
+                    query = "SELECT * FROM movies";
+                    node3.query( query, 
+                        function (err, result, fields) {
+                            result.forEach( function(object){
+                                var query3 = "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + object.id + ", \"" + object.name + "\", "+ object.year + ", " + object.rank + ")"
+                                node1.query(query3,
+                                    function (err, result, fields) {
+                                    if (err) throw err;
+                                });
+                            })
+                        }
+                    )
+                }
+            });*/
         }
         if(status[1] == 1){
             console.log("Entered Node 2 Recovery");
