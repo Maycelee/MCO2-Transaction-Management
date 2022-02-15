@@ -1,5 +1,10 @@
 const mysql = require('mysql2');
+const ping = require('ping');
 
+
+const ip1 = '178.128.223.106';
+const ip2 =  '139.59.252.54';
+const ip3 = '167.71.211.20';
 const pooluser = 'webapp'
 const poolpass = '40654'
 
@@ -36,18 +41,19 @@ const node3 = mysql.createPool({
 // create the connection to database
 const database = {
     connect: function() {
+        
         node1.getConnection(function (err) {
-            if (err) throw err;
+            //if(err) throw err;
             console.log("Node 1: Connection Successful.");
         });
 
         node2.getConnection(function (err) {
-            if (err) throw err;
+            //if (err) throw err;
             console.log("Node 2: Connection Successful.");
         });
 
         node3.getConnection(function (err) {
-            if (err) throw err;
+            //if (err) throw err;
             console.log("Node 3: Connection Successful.");
         });
     },
