@@ -84,6 +84,19 @@ const database = {
         } 
     },
 
+    //update recently reconnected node
+    recover: function(status){
+        if(status[0] == 1){
+
+        }
+        if(status[1] == 1){
+
+        }
+        if(status[2] == 1){
+
+        }
+    }
+
 }
 
 /**pool.getConnection(function(err) {
