@@ -44,17 +44,20 @@ const database = {
         
         node1.getConnection(function (err) {
             //if(err) throw err;
-            console.log("Node 1: Connection Successful.");
+            if(err) console.log("Unable to connect to Node 1");
+            else console.log("Node 1: Connection Successful.");
         });
 
         node2.getConnection(function (err) {
             //if (err) throw err;
-            console.log("Node 2: Connection Successful.");
+            if(err) console.log("Unable to connect to Node 2");
+            else console.log("Node 2: Connection Successful.");
         });
 
         node3.getConnection(function (err) {
             //if (err) throw err;
-            console.log("Node 3: Connection Successful.");
+            if(err) console.log("Unable to connect to Node 3");
+            else console.log("Node 3: Connection Successful.");
         });
     },
 
@@ -87,13 +90,13 @@ const database = {
     //update recently reconnected node
     recover: function(status){
         if(status[0] == 1){
-
+            console.log("Entered Node 1 Recovery");
         }
         if(status[1] == 1){
-
+            console.log("Entered Node 2 Recovery");
         }
         if(status[2] == 1){
-
+            console.log("Entered Node 3 Recovery");
         }
     }
 

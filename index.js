@@ -79,7 +79,8 @@ host2.forEach(function(host){
                 }
                 //console.log(info);
             });
-            if(loaded || ischanged){
+            if(loaded || ischanged){     
+                db.connect();
                 if(ischanged != 0){
                     console.log("Reloaded database due to changes");
                     //if node that changed was previously offline
@@ -87,9 +88,7 @@ host2.forEach(function(host){
                         db.recover(status);
                     }
                     status = [0,0,0];
-                }
-                    
-                db.connect();
+                }   
                 loaded = 0;
                 ischanged = 0;
             }
