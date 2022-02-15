@@ -1,7 +1,6 @@
 const mysql = require('mysql2');
 const ping = require('ping');
 
-
 const ip1 = '178.128.223.106';
 const ip2 =  '139.59.252.54';
 const ip3 = '167.71.211.20';
@@ -38,8 +37,8 @@ const node3 = mysql.createPool({
     queueLimit: 0
 });
 
-// create the connection to database
 const database = {
+    // create the connection to database
     connect: function() {
         
         node1.getConnection(function (err) {
@@ -61,6 +60,7 @@ const database = {
         });
     },
 
+    //Single query for either node 1, 2, or 3
     query: function(node, query){
         switch(node) {
             case 'node-1':
@@ -85,6 +85,36 @@ const database = {
         });
                 break;
         } 
+    },
+
+    //Multiple queries for concurrency
+    multiquery: function(node1_query, node2_query, node3_query){
+        //No concurrency yet
+
+
+        if(node1_query != ''){
+            node1.query(node1_query,
+                function (err, result, fields) {
+                    if (err) throw err;
+                    console.log(result);
+            });
+        }
+        
+        if(node2_query != ''){
+            node1.query(node2_query,
+                function (err, result, fields) {
+                    if (err) throw err;
+                    console.log(result);
+            });
+        }
+        
+        if(node3_query != ''){
+            node1.query(node3_query,
+                function (err, result, fields) {
+                    if (err) throw err;
+                    console.log(result);
+            });
+        }
     },
 
     //update recently reconnected node

@@ -26,13 +26,17 @@
         
         <div id="div-form">
             <form id="query-form" action="/query" method="post">
+                <p class='text-node'>Input Single Query</p>
+                <input type="text area"><br>
                 <p class='text-node'>Select Node to Generate</p>
                 <select name='node' class='form-generate'>
+                    <option value='empty'>Select Node</option>
                     <option value='node-1'>Node 1</option>
                     <option value='node-2'>Node 2</option>
                     <option value='node-3'>Node 3</option>
                 </select>
                 <input type="number" id="limit-quantity" class="form-generate" name="limit" min="1" placeholder="Row Limit">
+                
             </form>
         </div>
 
