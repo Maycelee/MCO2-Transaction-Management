@@ -1,3 +1,4 @@
+const res = require('express/lib/response');
 const mysql = require('mysql2');
 const ping = require('ping');
 
@@ -102,132 +103,33 @@ const database = {
         } 
     },
 
+    querynode1:  function(query){
+        node1.query(query);
+    },
+
+    callnode1:  function(query, callback){
+        node1.query(query, function(err, result, fields){
+            var output = result[0];
+            //console.log(output);
+            return callback(result);
+        });
+    },
+
+    querynode2: function(query){
+        node2.query(query, function(err, result, fields){
+            return result;
+        });
+    },
+
+    querynode3: function(query){
+        node3.query(query, function(err, result, fields){
+            return result;
+        });
+    },
+
     //Multiple queries for concurrency
     multiquery: function(node1_query, node2_query, node3_query){
-        //No concurrency yet
-        
-        console.log(active1);
-        if(node1_query.crud != "empty"){       
-            if(active1 == 1){
-                var query;
-                //If the query type is READ 
-                if(node1_query.crud == "read"){
-                    query = "SELECT * FROM movies WHERE";
-                    var first = 0;
-                    if(node1_query.id != ""){
-                        query = query + " id = " + node1_query.id;
-                        first = 1;
-                    }
-                    if(node1_query.name != ""){
-                        if(first == 1){
-                            query = query + " AND"; 
-                        }
-                        query = query + " name = \"" + node1_query.name + "\"";
-                        first = 1;
-                    }
-                    if(node1_query.year != ""){
-                        if(first == 1){
-                            query = query + " AND"; 
-                        }
-                        query = query + " year = " + node1_query.year;
-                        first = 1;
-                    }
-                    if(node1_query.rank != ""){
-                        if(first == 1){
-                            query = query + " AND"; 
-                        }
-                        query = query + " rank = " + node1_query.rank;
-                        first = 1;
-                    }   
-                    console.log(query);
-                    node1.query(query,
-                        function (err, result, fields) {
-                            if (err) throw err;
-                            console.log(fields);
-                    });
-                }
-                //if the query type is UPDATE
-                if(node1_query.crud == "update"){
-                    query = "UPDATE movies SET ";
-                    var first = 0;
-                    if(node1_query.name != ""){
-                        query = query + " movies.name = \"" + node1_query.name + "\""; 
-                        first = 1;
-                    }
-                    if(node1_query.year != ""){
-                        if(first == 1){
-                            query = query + ",";
-                        }
-                        query = query + " movies.year = " + node1_query.year; 
-                        first = 1;
-                    }
-                    if(node1_query.rank != ""){
-                        if(first == 1){
-                            query = query + ",";
-                        }
-                        query = query + " movies.rank = " + node1_query.rank;
-                        first = 1;
-                    }
-                    query = query + " WHERE id = " + node1_query.id;
-                    node1.query("SELECT * FROM movies WHERE id = " + node1_query.id, 
-                    function(err, result, fields){
-                        if(result != undefined){
-                            result.forEach(function(result){
-                                //if query will be changed to above 1979
-                                if(result.year < 1980 && node1_query.year >= 1980){
-                                    if(active2 == 1){
-                                        node2.query("DELETE movies FROM movies WHERE id = " + node1_query.id);
-                                    }
-                                    else{
-                                        //store query to file of node2
-                                    }
-                                    if(active3 ==1){
-                                        node3.query("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")", function(){
-                                            node3.query(query);
-                                        });
-                                        
-                                    }
-                                    else {//store query to file of node3
-    
-                                    }
-                                }
-                                else if(result.year >= 1980 && node1_query.year < 1980){ //if query will be changed to below 1980
-                                    if(active3 == 1){
-                                        node3.query("DELETE movies FROM movies WHERE id = " + node1_query.id);
-                                    }
-                                    else {
-                                        //store query to file of node 3
-                                    }
-                                    if(active2 == 1){
-                                        node2.query("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")",function (){
-                                            node2.query(query);
-                                            console.log(query);
-                                        });
-                                        
-                                    }    
-                                    else{
-                                        //store query to file of node 2
-                                    }
-                                }
-                                else if(result.year < 1980 || node1_query.year < 1980){
-                                    if(active2 == 1){
-                                        node2.query(query);
-                                        //console.log(query);
-                                    }
-                                }  
-                                else if(result.year >= 1980 || node1_query.year >= 1980){
-                                    if(active3 ==1){
-                                        node3.query(query);
-                                        
-                                    }
-                                }
-                            });      
-                            node1.query(query);
-                        }
-                    });
-                }
-            }    
-        }
+        //No concurrency yet  
         
         if(node2_query.crud != 'empty'){
             node1.query(node2_query,
