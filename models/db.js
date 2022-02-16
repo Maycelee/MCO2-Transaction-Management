@@ -91,14 +91,26 @@ const database = {
     //Multiple queries for concurrency
     multiquery: function(node1_query, node2_query, node3_query){
         //No concurrency yet
-
+        var ping = require('ping');
 
         if(node1_query != ''){
-            node1.query(node1_query,
-                function (err, result, fields) {
-                    if (err) throw err;
-                    console.log(result);
+            ping.sys.probe(ip1, function(active){
+                if(active == 1){
+                    node1.query(node1_query,
+                        function (err, result, fields) {
+                            if (err) throw err;
+                            console.log(fields);
+                    });
+                    var query = 'SELECT * FROM movies WHERE movies.year >= 1980'
+                    node1.query(query, function(err, result, fields){
+                        if(result != undefined){
+                            console.log("pog");
+                        }
+                    });
+
+                }
             });
+            
         }
         
         if(node2_query != ''){
