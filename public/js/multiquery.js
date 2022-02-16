@@ -185,20 +185,82 @@ $(document).ready(function () {
         });
     });
 
-    
-
     $("#execute-button").click(function () {
-        var node1_val = $("#node1-crud").val();
-        var node2_val = $("#node2-crud").val();
-        var node3_val = $("#node3-crud").val();
+        $("#alert-invalid").html("");
+        //Crud Dropdown
+        var node1_crud = $("#node1-crud").val();
+        var node2_crud = $("#node2-crud").val();
+        var node3_crud = $("#node3-crud").val();
+        //ID Textboxes
+        var node1_id = $("#node1-id").val();
+        var node2_id = $("#node2-id").val();
+        var node3_id = $("#node3-id").val();
+        //Name Textboxes
+        var node1_name = $("#node1-name").val();
+        var node2_name = $("#node2-name").val();
+        var node3_name = $("#node3-name").val();
+        //Year Textboxes
+        var node1_year = $("#node1-year").val();
+        var node2_year = $("#node2-year").val();
+        var node3_year = $("#node3-year").val();
+        //Rank Textboxes
+        var node1_rank = $("#node1-rank").val();
+        var node2_rank = $("#node2-rank").val();
+        var node3_rank = $("#node3-rank").val();
 
-        console.log(node1_val);
-        console.log(node2_val);
-        console.log(node3_val);
-
-        if(node1_val == "empty" && node2_val =="empty" && node3_val == "empty"){
-            alert("All fields cannot be empty. Fill at least one.");
-        } else {
+        //All Crud Dropdown is Empty
+        if (node1_crud == "empty" && node2_crud == "empty" && node3_crud == "empty"){
+            $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>All fields cannot be empty. Fill at least one.</p>");
+            $("#alert-invalid").show();
+        }
+        //Update but Empty ID
+        else if (node1_crud == "update" || node2_crud == "update" || node3_crud == "update"){
+            //Node 1
+            if (node1_crud == "update" && node1_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 1 when ID field is empty.</p>");
+            } else if (node1_crud == "update" && node1_id !="") {
+                //Empty Name, Rank, Year values
+                if (node1_name == "" && node1_year == "" && node1_rank == "") {
+                    $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 1 when there are no new values.</p>");
+                }
+            }
+            //Node 2
+            if (node2_crud == "update" && node2_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 2 when ID field is empty.</p>");
+            } else if (node2_crud == "update" && node2_id != ""){
+                //Empty Name, Rank, Year values
+                if (node2_name == "" && node2_year == "" && node2_rank == "") {
+                    $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 2 when there are no new values.</p>");
+                }
+            }
+            //Node 3
+            if (node3_crud == "update" && node3_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 3 when ID field is empty.</p>");
+            } else if (node3_crud == "update" && node3_id != ""){
+                //Empty Name, Rank, Year values
+                if (node3_name == "" && node3_year == "" && node3_rank == "") {
+                    $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 3 when there are no new values.</p>");
+                }
+            }
+            $("#alert-invalid").show();
+        }
+        //Delete but Empty ID
+        else if (node1_crud == "delete" || node2_crud == "delete" || node3_crud == "delete") {
+            //Node 1
+            if (node1_crud == "delete" && node1_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot DELETE in Node 1 when ID field is empty.</p>");
+            }
+            //Node 2
+            if (node2_crud == "delete" && node2_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot DELETE in Node 2 when ID field is empty.</p>");
+            }
+            //Node 3
+            if (node3_crud == "delete" && node3_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot DELETE in Node 3 when ID field is empty.</p>");
+            }
+            $("#alert-invalid").show();
+        }
+        else {
             $("#query-form").submit();
         }
     });
