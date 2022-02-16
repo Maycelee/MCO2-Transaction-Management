@@ -7,9 +7,7 @@ const ip2 =  '139.59.252.54';
 const ip3 = '167.71.211.20';
 const pooluser = 'webapp'
 const poolpass = '40654'
-var active1 = 0;
-var active2 = 0;
-var active3 = 0;
+
 ping.sys.probe(ip1, function(active){
     if(active==1)
         active1 = 1;
@@ -109,8 +107,6 @@ const database = {
 
     callnode1:  function(query, callback){
         node1.query(query, function(err, result, fields){
-            var output = result[0];
-            //console.log(output);
             return callback(result);
         });
     },
@@ -121,9 +117,21 @@ const database = {
         });
     },
 
+    callnode2:  function(query, callback){
+        node2.query(query, function(err, result, fields){
+            return callback(result);
+        });
+    },
+
     querynode3: function(query){
         node3.query(query, function(err, result, fields){
             return result;
+        });
+    },
+
+    callnode3:  function(query, callback){
+        node3.query(query, function(err, result, fields){
+            return callback(result);
         });
     },
 
