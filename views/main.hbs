@@ -16,6 +16,7 @@
     
     <!-- TRANSACTIONS -->
     <div id="query-box">
+        <!-- Generate Table or Multiple Queries -->
         <div id="div-pick">
             <p class="text-transaction"><a onclick="window.location.href=this">Transaction |</a></p>
             <form id="radio-transaction">
@@ -24,29 +25,42 @@
             </form>
         </div>
         
+        <!-- Generate Form -->
         <div id="div-form">
             <form id="query-form" action="/query" method="post">
-                <p class='text-node'>Input Single Query</p>
-                <input type="text area"><br>
-                <p class='text-node'>Select Node to Generate</p>
-                <select name='node' class='form-generate'>
-                    <option value='empty'>Select Node</option>
+                <!-- Search Based on Conditions -->
+                <p class='text-node'>Search</p>
+                <div id="generate-box">
+                    <input type="search" id="movie-id" class="generate-query" name="movieid" placeholder="ID" autocomplete="off">
+                    <input type="search" id="movie-name" class="generate-query" name="moviename" placeholder="Name" autocomplete="off">
+                    <input type="search" id="movie-year" class="generate-query" name="movieyear" placeholder="Year" autocomplete="off">
+                    <input type="search" id="movie-rank" class="generate-query" name="movierank" placeholder="Rank" autocomplete="off">
+                </div>
+                <br>
+
+                <!-- Select Node to Search On -->
+                <p class='text-node'>Select Node</p>
+                <select name='node' id="select-node" class='form-generate'>
+                    <option value='all'>All</option>
                     <option value='node-1'>Node 1</option>
                     <option value='node-2'>Node 2</option>
                     <option value='node-3'>Node 3</option>
                 </select>
+
+                <!-- Add Row Limit -->
                 <input type="number" id="limit-quantity" class="form-generate" name="limit" min="1" placeholder="Row Limit">
                 
             </form>
         </div>
 
+        <!-- Submit Buttons -->
         <div id="div-buttons">
             <button id="generate-button" class="interactive-buttons">Generate</button>
             <button id="execute-button" class="interactive-buttons" style="display: none;">Execute</button>
         </div>
     </div>
 
-    <!-- DISPLAY -->
+    <!-- DISPLAY RESULTS-->
     <div id="query-results">
         <div id="results-box">
             <p id="text-results">Results</p>

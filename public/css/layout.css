@@ -17,26 +17,19 @@ textarea {
 }
 
 /*CLASS*/
-.text-transaction { /*<p>*/
+.text-transaction {
     margin: 0px;
     font-weight: 700;
     font-size: x-large;
 }
 
-.interactive-buttons { /*<button>*/
+.interactive-buttons {
     height: 35px;
     width: 100px;
-    background-color: #F5C518;
     border-radius: 5px;
-    border-color: #121212;
     text-decoration: none;
     font-weight: 700;
     transition-duration: 0.4s;
-}
-
-.interactive-buttons:hover { /*<button>*/
-    background-color: #121212;
-    color: white;
 }
 
 .text-node {
@@ -47,11 +40,31 @@ textarea {
 
 .form-generate {
     margin-bottom: 8px;
-    width: 100px;
+    width: 110px;
     font-family: 'Assistant', sans-serif;
     font-weight: 500;
     font-size: medium;
 }
+
+.node-query, .generate-box {
+    display: flex;
+    flex-direction: row;
+}
+
+.select-crud {
+    margin-right: 8px;
+    height: 30px;
+    font-family: 'Assistant', sans-serif;
+    font-size: medium;
+}
+
+.query-crud, .generate-query {
+    height: 30px;
+    font-family: 'Assistant', sans-serif;
+    font-size: medium;
+}
+
+
 
 /*ID*/
 #website-title { /*<p>*/
@@ -82,9 +95,32 @@ textarea {
     color: black;
 }
 
-#radio-transaction { /*<form>*/
+#generate-button:hover, #execute-button:hover {
+    background-color: #121212;
+    color: white;
+}
+
+#generate-button, #execute-button {
+    background-color: #F5C518;
+    color: black;
+    border-color: #121212;
+}
+
+#radio-transaction {
     font-weight: 500;
     font-size: larger;
+}
+
+#movie-id, #node1-id, #node2-id, #node3-id {
+    width: 50px;
+}
+
+#movie-name, #node1-name, #node2-name, #node3-name {
+    width: 400px;
+}
+
+#movie-year, #movie-rank, #node1-year, #node1-rank, #node2-year, #node2-rank, #node3-year, #node3-rank {
+    width: 100px;
 }
 
 #text-results { /*<p>*/
