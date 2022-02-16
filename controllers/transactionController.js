@@ -18,16 +18,52 @@ const transactionController = {
     },
 
     postMulti: function(req, res) {
-        var node1_query = req.body.query1;
-        var node2_query = req.body.query2;
-        var node3_query = req.body.query3;
+        var node1 = {
+            "crud": req.body.node1crud,
+            "id": req.body.node1id,
+            "name": req.body.node1name,
+            "year": req.body.node1year,
+            "rank": req.body.node1rank
+        };
 
-        console.log(node1_query);
-        console.log(node2_query);
-        console.log(node3_query);
-        
-        db.multiquery(node1_query, node2_query, node3_query);
-        
+        var node2 = {
+            "crud": req.body.node2crud,
+            "id": req.body.node2id,
+            "name": req.body.node2name,
+            "year": req.body.node2year,
+            "rank": req.body.node2rank
+        };
+
+        var node3 = {
+            "crud": req.body.node3crud,
+            "id": req.body.node3id,
+            "name": req.body.node3name,
+            "year": req.body.node3name,
+            "rank": req.body.node3rank
+        };
+
+        /*console.log("Node 1 Crud:" + node1_crud);
+        console.log("Node 2 Crud:" + node2_crud);
+        console.log("Node 3 Crud:" + node3_crud);
+        console.log("Node 1 ID:" + node1_id);
+        console.log("Node 2 ID:" + node2_id);
+        console.log("Node 3 ID:" + node3_id);
+        console.log("Node 1 Name:" + node1_name);
+        console.log("Node 2 Name:" + node2_name);
+        console.log("Node 3 Name:" + node3_name);
+        console.log("Node 1 Year:" + node1_year);
+        console.log("Node 2 Year:" + node2_year);
+        console.log("Node 3 Year:" + node3_year);
+        console.log("Node 1 Rank:" + node1_rank);
+        console.log("Node 2 Rank:" + node2_rank);
+        console.log("Node 3 Rank:" + node3_rank);
+
+        console.log(node1);
+        console.log(node2);
+        console.log(node3);*/
+
+        db.multiquery(node1, node2, node3);
+
         res.render('main');
     }
 

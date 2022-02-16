@@ -64,9 +64,9 @@ $(document).ready(function () {
 
             "<p class='text-node'>Isolation Level</p>" +
             "<select name='isolation' id='form-isolation'>" +
+                "<option value='read-repeatable'>Repeatable Read</option>" +
                 "<option value='read-uncommitted'>Read Uncommitted</option>" +
                 "<option value='read-committed'>Read Committed</option>" +
-                "<option value='read-repeatable'>Read Repeatable</option>" +
                 "<option value='serializable'>Serializable</option>" +
             "</select>" +
 
@@ -186,7 +186,6 @@ $(document).ready(function () {
     });
 
     $("#execute-button").click(function () {
-        $("#alert-invalid").html("");
         //Crud Dropdown
         var node1_crud = $("#node1-crud").val();
         var node2_crud = $("#node2-crud").val();
@@ -208,61 +207,79 @@ $(document).ready(function () {
         var node2_rank = $("#node2-rank").val();
         var node3_rank = $("#node3-rank").val();
 
+        var nodepass = true;
+        var updatepass = true;
+        var deletepass = true;
+
         //All Crud Dropdown is Empty
         if (node1_crud == "empty" && node2_crud == "empty" && node3_crud == "empty"){
+            $("#alert-invalid").html("");
             $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>All fields cannot be empty. Fill at least one.</p>");
             $("#alert-invalid").show();
+            nodepass = false;
         }
         //Update but Empty ID
-        else if (node1_crud == "update" || node2_crud == "update" || node3_crud == "update"){
+        if (node1_crud == "update" || node2_crud == "update" || node3_crud == "update"){
+            $("#alert-invalid").html("");
             //Node 1
             if (node1_crud == "update" && node1_id == "") {
                 $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 1 when ID field is empty.</p>");
+                updatepass = false;
             } else if (node1_crud == "update" && node1_id !="") {
                 //Empty Name, Rank, Year values
                 if (node1_name == "" && node1_year == "" && node1_rank == "") {
                     $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 1 when there are no new values.</p>");
-                }
+                    updatepass = false;
+                } else { updatepass = true; }
             }
             //Node 2
             if (node2_crud == "update" && node2_id == "") {
                 $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 2 when ID field is empty.</p>");
+                updatepass = false;
             } else if (node2_crud == "update" && node2_id != ""){
                 //Empty Name, Rank, Year values
                 if (node2_name == "" && node2_year == "" && node2_rank == "") {
                     $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 2 when there are no new values.</p>");
-                }
+                    updatepass = false
+                } else { updatepass = true; }
             }
             //Node 3
             if (node3_crud == "update" && node3_id == "") {
                 $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 3 when ID field is empty.</p>");
+                updatepass = false;
             } else if (node3_crud == "update" && node3_id != ""){
                 //Empty Name, Rank, Year values
                 if (node3_name == "" && node3_year == "" && node3_rank == "") {
                     $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot UPDATE Node 3 when there are no new values.</p>");
-                }
+                    updatepass = false;
+                } else { updatepass = true; }
             }
             $("#alert-invalid").show();
         }
         //Delete but Empty ID
-        else if (node1_crud == "delete" || node2_crud == "delete" || node3_crud == "delete") {
+        if (node1_crud == "delete" || node2_crud == "delete" || node3_crud == "delete") {
+            $("#alert-invalid").html("");
             //Node 1
             if (node1_crud == "delete" && node1_id == "") {
                 $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot DELETE in Node 1 when ID field is empty.</p>");
-            }
+                deletepass = false;
+            } else { deletepass = true; }
             //Node 2
             if (node2_crud == "delete" && node2_id == "") {
                 $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot DELETE in Node 2 when ID field is empty.</p>");
-            }
+                deletepass = false;
+            } else { deletepass = true; }
             //Node 3
             if (node3_crud == "delete" && node3_id == "") {
                 $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot DELETE in Node 3 when ID field is empty.</p>");
-            }
+                deletepass = false;
+            } else { deletepass = true; }
             $("#alert-invalid").show();
         }
-        else {
-            $("#query-form").submit();
-        }
+        console.log(nodepass);
+        console.log(updatepass);
+        console.log(deletepass);
+        if (nodepass && updatepass && deletepass){ $("#query-form").submit(); }
     });
 });
 
