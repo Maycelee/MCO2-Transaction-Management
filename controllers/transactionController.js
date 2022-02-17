@@ -241,15 +241,19 @@ const transactionController = {
                             //if query will be changed to above 1979
                             if(result.year < 1980 && node1_query.year >= 1980){
                                 if(active2 == 1){
-                                    await db.querynode2(startquery+ "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                    console.log("heeee");
+                                    db.querynode2(startquery+ "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 else{
                                     //store query to file of node2
                                     file.writeNode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 if(active3 ==1){
-                                    await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
-                                    await db.querynode3(query);
+                                    console.log("hiiii");
+                                    setTimeout(() => {  
+                                    }, 3000);
+                                    await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;" + query);
+                                    //await db.querynode3(query);
                                 }
                                 else {//store query to file of node3
                                     file.writeNode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
@@ -258,18 +262,22 @@ const transactionController = {
                             }
                             else if(result.year >= 1980 && node1_query.year < 1980){ //if query will be changed to below 1980
                                 if(active3 == 1){
-                                    await db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                    console.log("haaaaa");
+                                    db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 else {
                                     //store query to file of node 3
                                     file.writeNode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 if(active2 == 1){
-                                    await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
-                                    await db.querynode2(query);
+                                    //store query to file of node 2
+                                    console.log("hiiii");
+                                    setTimeout(() => {  
+                                    }, 3000);
+                                    await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT; " + query);
                                 }    
                                 else{
-                                    //store query to file of node 2
+                                    
                                     file.writeNode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
                                     file.writeNode2(query);
                                 }
@@ -306,8 +314,10 @@ const transactionController = {
                                             file.writeNode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                         }
                                         if(active3 ==1){
-                                            await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
-                                            await db.querynode3(query);
+                                            setTimeout(() => {  
+                                            }, 3000);
+                                            await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;" + query);
+                                            //await db.querynode3(query);
                                         }
                                         else {//store query to file of node3
                                             file.writeNode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
@@ -340,8 +350,10 @@ const transactionController = {
                                                     file.writeNode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                                 }
                                                 if(active2 == 1){
-                                                    await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
-                                                    await db.querynode2(query);
+                                                    setTimeout(() => {  
+                                                    }, 3000);
+                                                    await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;" + query);
+                                                    //await db.querynode2(query);
                                                 }    
                                                 else{
                                                     //store query to file of node 2
