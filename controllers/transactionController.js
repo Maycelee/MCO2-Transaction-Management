@@ -2,6 +2,8 @@ const e = require('express');
 const db = require('../models/db.js');
 const ping = require('ping');
 const file = require('../public/js/file');
+const async = require ('async');
+
 
 const ip1 = '178.128.223.106';
 const ip2 =  '139.59.252.54';
@@ -11,7 +13,6 @@ var active2 = 0;
 var active3 = 0;
 const transactionController = {
     postQuery: function(req, res) {
-        console.log("im here");
         var node1_query = {
             "crud": req.body.node1crud,
             "id": req.body.node1id,
@@ -37,7 +38,6 @@ const transactionController = {
         };
 
         var isolation = req.body.isolation;
-        console.log(isolation);
         var trans = require('../controllers/transactionController.js');
         ping.sys.probe(ip1, function(activen1){
             if(activen1==1)
@@ -56,20 +56,26 @@ const transactionController = {
                     else{
                         active3 = 0;
                     }
+                    var trans = require('../controllers/transactionController.js');
                     trans.postIsolation(isolation);
 
                     trans.replication(node1_query);
                     trans.replication(node2_query);
                     trans.replication(node3_query);
 
-                    
                     trans.checkConsistency(node1_query);
-                    if(node1_query.id != node2_query.id){
-                        trans.checkConsistency(node2_query);
-                    }
-                    if((node3_query.id != node2_query.id) && (node3_query.id != node2_query.id)){
-                        trans.checkConsistency(node3_query);
-                    }
+                        if(node1_query.id != node2_query.id){
+                            trans.checkConsistency(node2_query);
+                        }
+                        if((node3_query.id != node2_query.id) && (node3_query.id != node2_query.id)){
+                            trans.checkConsistency(node3_query);
+                        }
+                    //trans.replication(node1_query);
+                    //trans.replication(node2_query);
+                    //trans.replication(node3_query);
+
+                    
+                    
                 });
             });
         });
