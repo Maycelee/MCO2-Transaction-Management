@@ -73,7 +73,6 @@ $(document).ready(function () {
 
         $("#node1-crud").change(function() {
             var val = $(this).val();
-            console.log("HELLOOOOO");
             switch(val) {
                 case 'empty':
                     $("#node3-name").show();
@@ -84,13 +83,9 @@ $(document).ready(function () {
                     $("#node3-year").attr("placeholder", "Year");
                     $("#node3-rank").attr("placeholder", "Rank");
                 case 'read':
-                    $("#node1-name").show();
-                    $("#node1-year").show();
-                    $("#node1-rank").show();
-
-                    $("#node1-name").attr("placeholder", "Name");
-                    $("#node1-year").attr("placeholder", "Year");
-                    $("#node1-rank").attr("placeholder", "Rank");
+                    $("#node1-name").hide();
+                    $("#node1-year").hide();
+                    $("#node1-rank").hide();
                     break;
                 case 'delete':
                     $("#node1-name").hide();
@@ -121,13 +116,9 @@ $(document).ready(function () {
                     $("#node3-year").attr("placeholder", "Year");
                     $("#node3-rank").attr("placeholder", "Rank");
                 case 'read':
-                    $("#node2-name").show();
-                    $("#node2-year").show();
-                    $("#node2-rank").show();
-
-                    $("#node2-name").attr("placeholder", "Name");
-                    $("#node2-year").attr("placeholder", "Year");
-                    $("#node2-rank").attr("placeholder", "Rank");
+                    $("#node2-name").hide();
+                    $("#node2-year").hide();
+                    $("#node2-rank").hide();
                     break;
                 case 'delete':
                     $("#node2-name").hide();
@@ -158,13 +149,9 @@ $(document).ready(function () {
                     $("#node3-year").attr("placeholder", "Year");
                     $("#node3-rank").attr("placeholder", "Rank");
                 case 'read':
-                    $("#node3-name").show();
-                    $("#node3-year").show();
-                    $("#node3-rank").show();
-
-                    $("#node3-name").attr("placeholder", "Name");
-                    $("#node3-year").attr("placeholder", "Year");
-                    $("#node3-rank").attr("placeholder", "Rank");
+                    $("#node3-name").hide();
+                    $("#node3-year").hide();
+                    $("#node3-rank").hide();
                     break;
                 case 'delete':
                     $("#node3-name").hide();
@@ -207,7 +194,8 @@ $(document).ready(function () {
         var node1_rank = $("#node1-rank").val();
         var node2_rank = $("#node2-rank").val();
         var node3_rank = $("#node3-rank").val();
-
+        
+        var readpass = true;
         var nodepass = true;
         var updatepass = true;
         var deletepass = true;
@@ -218,6 +206,26 @@ $(document).ready(function () {
             $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>All fields cannot be empty. Fill at least one.</p>");
             $("#alert-invalid").show();
             nodepass = false;
+        }
+        //Read but Empty ID
+        if (node1_crud == "read" || node2_crud == "read" || node3_crut == "read"){
+            $("#alert-invalid").html("");
+            //Node 1
+            if (node1_crud == "read" && node1_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot READ in Node 1 when ID field is empty.</p>");
+                readpass = false;
+            } else { readpass = true; }
+            //Node 2
+            if (node2_crud == "read" && node2_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot READ in Node 2 when ID field is empty.</p>");
+                readpass = false;
+            } else { readpass = true; }
+            //Node 3
+            if (node3_crud == "read" && node3_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot READ in Node 3 when ID field is empty.</p>");
+                readpass = false;
+            } else { readpass = true; }
+            $("#alert-invalid").show();
         }
         //Update but Empty ID
         if (node1_crud == "update" || node2_crud == "update" || node3_crud == "update"){
