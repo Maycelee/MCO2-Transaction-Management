@@ -12,7 +12,7 @@ $(document).ready(function () {
 
         $("#query-form").html(
             //Node 1 Query Input Boxes
-            "<p class='text-node'>Node 1</p>" +
+            "<p class='text-node'>Transaction 1</p>" +
             
             "<div id='node1-query' class='node-query'>"+
             "<select id='node1-crud' name='node1crud' class='select-crud'>" +
@@ -29,7 +29,7 @@ $(document).ready(function () {
             "</div><br>"+
 
             //Node 2 Query Input Boxes
-            "<p class='text-node'>Node 2</p>" +
+            "<p class='text-node'>Transaction 2</p>" +
 
             "<div id='node2-query' class='node-query'>"+
             "<select id='node2-crud' name='node2crud' class='select-crud'>" +
@@ -46,7 +46,7 @@ $(document).ready(function () {
             "</div><br>"+
 
             //Node 3 Query Input Boxes
-            "<p class='text-node'>Node 3</p>" +
+            "<p class='text-node'>Transaction 3</p>" +
             
             "<div id='node3-query' class='node-query'>"+
             "<select id='node3-crud' name='node3crud' class='select-crud'>" +
@@ -75,13 +75,14 @@ $(document).ready(function () {
             var val = $(this).val();
             switch(val) {
                 case 'empty':
-                    $("#node3-name").show();
-                    $("#node3-year").show();
-                    $("#node3-rank").show();
+                    $("#node1-name").show();
+                    $("#node1-year").show();
+                    $("#node1-rank").show();
 
-                    $("#node3-name").attr("placeholder", "Name");
-                    $("#node3-year").attr("placeholder", "Year");
-                    $("#node3-rank").attr("placeholder", "Rank");
+                    $("#node1-name").attr("placeholder", "Name");
+                    $("#node1-year").attr("placeholder", "Year");
+                    $("#node1-rank").attr("placeholder", "Rank");
+                    break;
                 case 'read':
                     $("#node1-name").hide();
                     $("#node1-year").hide();
@@ -108,13 +109,14 @@ $(document).ready(function () {
             var val = $(this).val();
             switch(val) {
                 case 'empty':
-                    $("#node3-name").show();
-                    $("#node3-year").show();
-                    $("#node3-rank").show();
+                    $("#node2-name").show();
+                    $("#node2-year").show();
+                    $("#node2-rank").show();
 
-                    $("#node3-name").attr("placeholder", "Name");
-                    $("#node3-year").attr("placeholder", "Year");
-                    $("#node3-rank").attr("placeholder", "Rank");
+                    $("#node2-name").attr("placeholder", "Name");
+                    $("#node2-year").attr("placeholder", "Year");
+                    $("#node2-rank").attr("placeholder", "Rank");
+                    break;
                 case 'read':
                     $("#node2-name").hide();
                     $("#node2-year").hide();
@@ -148,6 +150,7 @@ $(document).ready(function () {
                     $("#node3-name").attr("placeholder", "Name");
                     $("#node3-year").attr("placeholder", "Year");
                     $("#node3-rank").attr("placeholder", "Rank");
+                    break;
                 case 'read':
                     $("#node3-name").hide();
                     $("#node3-year").hide();
@@ -288,7 +291,7 @@ $(document).ready(function () {
         console.log(nodepass);
         console.log(updatepass);
         console.log(deletepass);
-        if (nodepass && updatepass && deletepass){ $("#query-form").submit(); }
+        if (readpass && nodepass && updatepass && deletepass){ $("#query-form").submit(); }
     });
 });
 

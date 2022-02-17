@@ -135,7 +135,7 @@ const transactionController = {
                         if(result.year < 1980){
                             if(active2 == 1){
                                 db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res2){
-                                    if(res2!= undefined){
+                                    if(res2[0]!= undefined){
                                         res2.forEach(function(result2) {
                                             if((result.name != result2.name) || (result.year != result2.year) || (result.rank != result2.year)){
                                                 query = "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id;
@@ -190,35 +190,21 @@ const transactionController = {
             var query;
             //If the query type is READ 
             if(node1_query.crud == "read"){
-                query = "SELECT * FROM movies WHERE";
-                var first = 0;
-                if(node1_query.id != ""){
-                    query = query + " id = " + node1_query.id;
-                    first = 1;
-                }
-                if(node1_query.name != ""){
-                    if(first == 1){
-                        query = query + " AND"; 
-                    }
-                    query = query + " name = \"" + node1_query.name + "\"";
-                    first = 1;
-                }
-                if(node1_query.year != ""){
-                    if(first == 1){
-                        query = query + " AND"; 
-                    }
-                    query = query + " year = " + node1_query.year;
-                    first = 1;
-                }
-                if(node1_query.rank != ""){
-                    if(first == 1){
-                        query = query + " AND"; 
-                    }
-                    query = query + " rank = " + node1_query.rank;
-                    first = 1;
-                }   
+                query = "SELECT * FROM movies WHERE id = " + node1_query.id;
                 console.log(query);
-                db.querynode1(query);
+                
+                if(active1 == 1){
+                    db.querynode1(query);
+                }
+                else{
+                    if(active2 == 1){
+                        db.callnode2(query, function(res){
+                            if(res[0] == undefined){
+                                db.querynode3(query);
+                            }
+                        });
+                    }
+                }
             }
             //if the query type is UPDATE
             if(node1_query.crud == "update"){
@@ -256,13 +242,15 @@ const transactionController = {
                                 }
                                 else{
                                     //store query to file of node2
+                                    file.writeNode2("DELETE movies FROM movies WHERE id = " + node1_query.id);
                                 }
                                 if(active3 ==1){
                                     db.querynode3("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")");
                                     db.querynode3(query);
                                 }
                                 else {//store query to file of node3
-
+                                    file.writeNode3("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")");
+                                    file.writeNode3(query);
                                 }
                             }
                             else if(result.year >= 1980 && node1_query.year < 1980){ //if query will be changed to below 1980
@@ -271,6 +259,7 @@ const transactionController = {
                                 }
                                 else {
                                     //store query to file of node 3
+                                    file.writeNode3("DELETE movies FROM movies WHERE id = " + node1_query.id);
                                 }
                                 if(active2 == 1){
                                     db.querynode2("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")");
@@ -278,6 +267,8 @@ const transactionController = {
                                 }    
                                 else{
                                     //store query to file of node 2
+                                    file.writeNode2("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")");
+                                    file.writeNode2(query);
                                 }
                             }
                             else if(result.year < 1980 || node1_query.year < 1980){
@@ -285,12 +276,15 @@ const transactionController = {
                                     db.querynode2(query);
                                     //console.log(query);
                                 }
+                                else
+                                    file.writeNode2(query);
                             }  
                             else if(result.year >= 1980 || node1_query.year >= 1980){
                                 if(active3 ==1){
                                     db.querynode3(query);
-                                    
                                 }
+                                else //store query to file of node 3 
+                                    file.writeNode3(query);
                             }
                         });      
                         db.querynode1(query);
@@ -306,23 +300,27 @@ const transactionController = {
                                         }
                                         else{
                                             //store query to file of node2
+                                            file.writeNode2("DELETE movies FROM movies WHERE id = " + node1_query.id);
                                         }
                                         if(active3 ==1){
                                             db.querynode3("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")");
                                             db.querynode3(query);
                                         }
                                         else {//store query to file of node3
-        
+                                            file.writeNode3("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")");
+                                            file.writeNode3(query);
                                         }
                                     }
                                     else{
-                                        if(active3 ==1){
-                                            db.querynode3(query);       
+                                        if(active2 == 1){
+                                            db.querynode2(query);       
                                         }
                                         else{
                                             //store query to file of node3
+                                            file.writeNode2(query);
                                         }
                                     }
+                                    //store query to file of node 1
                                     file.writeNode1(query);
                                 });      
                             }
@@ -336,6 +334,7 @@ const transactionController = {
                                                 }
                                                 else {
                                                     //store query to file of node 3
+                                                    file.writeNode3("DELETE movies FROM movies WHERE id = " + node1_query.id);
                                                 }
                                                 if(active2 == 1){
                                                     db.querynode2("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")");
@@ -343,6 +342,8 @@ const transactionController = {
                                                 }    
                                                 else{
                                                     //store query to file of node 2
+                                                    file.writeNode2("INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + ")");
+                                                    file.writeNode2(query);
                                                 }
                                             }
                                             else{
@@ -351,6 +352,7 @@ const transactionController = {
                                                 }
                                                 else{
                                                     //store query to file of node3
+                                                    file.writeNode3(query);
                                                 }
                                             }
                                             //store query to file of node1
@@ -381,6 +383,7 @@ const transactionController = {
                                     }
                                     else{
                                         //save to sql file
+                                        file.writeNode2(query);
                                     }
                                 }
                                 if(result.year >= 1980){
@@ -390,6 +393,7 @@ const transactionController = {
                                     }
                                     else{
                                         //save to sql file
+                                        file.writeNode3(query);
                                     }
                                 }
                             });
@@ -403,6 +407,7 @@ const transactionController = {
                                         }
                                         else{
                                             //save sql to node 2 text file
+                                            file.writeNode2(query);
                                         }
                                     });
                                 }
@@ -415,11 +420,12 @@ const transactionController = {
                                                 }
                                                 else{
                                                     //save sql to node 3 text
+                                                    file.writeNode3(query);
                                                 }
                                             });
                                         }
                                         else{
-                                        
+                                            //file does not exist
                                         }                                             
                                     });
                                 }                                             
@@ -434,6 +440,8 @@ const transactionController = {
                 }            
             }     
         }    
+        console.log("done");
+
     }
 }
 
