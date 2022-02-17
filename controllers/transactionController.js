@@ -2,7 +2,6 @@ const e = require('express');
 const db = require('../models/db.js');
 const ping = require('ping');
 const file = require('../public/js/file');
-const { callnode1 } = require('../models/db.js');
 
 const ip1 = '178.128.223.106';
 const ip2 =  '139.59.252.54';
@@ -156,11 +155,11 @@ const transactionController = {
                         }
                         if(result.year >= 1980){
                             if(active3 == 1){
-                                console.log("Ientered");
+                                
                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res2){
-                                    console.log(res);
+            
                                     if(res2[0]!= undefined){
-                                        console.log("im in");
+                                        
                                         res2.forEach(function(result2) {
                                             if((result.name != result2.name) || (result.year != result2.year) || (result.rank != result2.year)){
                                                 query = "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id;
@@ -190,9 +189,7 @@ const transactionController = {
             var query;
             //If the query type is READ 
             if(node1_query.crud == "read"){
-                query = "SELECT * FROM movies WHERE id = " + node1_query.id;
-                console.log(query);
-                
+                query = "SELECT * FROM movies WHERE id = " + node1_query.id;    
                 if(active1 == 1){
                     db.querynode1(query);
                 }
@@ -440,8 +437,6 @@ const transactionController = {
                 }            
             }     
         }    
-        console.log("done");
-
     }
 }
 
