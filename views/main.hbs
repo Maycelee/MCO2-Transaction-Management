@@ -8,8 +8,7 @@
     <link rel="stylesheet" type="text/css" href="/css/layout.css">
     <link rel="icon" type = "image/x-icon" href="https://upload.wikimedia.org/wikipedia/commons/c/cc/IMDb_Logo_Square.svg">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js" type="text/javascript"></script>
-    <script src="/js/generate.js" type="text/javascript"></script>
-    <script src="/js/multiquery.js" type="text/javascript"></script>
+    <script src="/js/query.js" type="text/javascript"></script>
 </head>
 <body>
     <p id="website-title">IMDb</p>
@@ -18,46 +17,77 @@
     <div id="query-box">
         <!-- Generate Table or Multiple Queries -->
         <div id="div-pick">
-            <p class="text-transaction"><a onclick="window.location.href=this">Transaction |</a></p>
-            <form id="radio-transaction">
-                <input type="radio" id="radio-multi" class="radio-query" name="query-count" value="Multi">
-                <label for="radio-multi">Multiple Queries</label>
-            </form>
+            <p class="text-transaction"><a onclick="window.location.href=this">Transaction</a></p>
         </div>
         
         <!-- Generate Form -->
         <div id="div-form">
             <form id="query-form" action="/query" method="post">
-                <!-- Search Based on Conditions -->
-                <p class='text-node'>Search</p>
-                <div id="generate-box">
-                    <input type="search" id="movie-id" class="generate-query" name="movieid" placeholder="ID" autocomplete="off">
-                    <input type="search" id="movie-name" class="generate-query" name="moviename" placeholder="Name" autocomplete="off">
-                    <input type="search" id="movie-year" class="generate-query" name="movieyear" placeholder="Year" autocomplete="off">
-                    <input type="search" id="movie-rank" class="generate-query" name="movierank" placeholder="Rank" autocomplete="off">
-                </div>
-                <br>
-
-                <!-- Select Node to Search On -->
-                <p class='text-node'>Select Node</p>
-                <select name='node' id="select-node" class='form-generate'>
-                    <option value='all'>All</option>
-                    <option value='node-1'>Node 1</option>
-                    <option value='node-2'>Node 2</option>
-                    <option value='node-3'>Node 3</option>
+                <!-- Node 1 Query Input Boxes -->
+                <p class='text-node'>Transaction 1</p>
+                
+                <div id='node1-query' class='node-query'>
+                <select id='node1-crud' name='node1crud' class='select-crud'>
+                    <option value='empty'></option>
+                    <option value='read'>Read</option>
+                    <option value='update'>Update</option>
+                    <option value='delete'>Delete</option>
                 </select>
 
-                <!-- Add Row Limit -->
-                <input type="number" id="limit-quantity" class="form-generate" name="limit" min="1" placeholder="Row Limit">
+                <input type='search' id='node1-id' class='query-crud' name='node1id' placeholder='ID' autocomplete='off'>
+                <input type='search' id='node1-name' class='query-crud' name='node1name' placeholder='Name' autocomplete='off'>
+                <input type='search' id='node1-year' class='query-crud' name='node1year' placeholder='Year' autocomplete='off'>
+                <input type='search' id='node1-rank' class='query-crud' name='node1rank' placeholder='Rank' autocomplete='off'></input>
+                </div><br>
+
+                <!-- Node 2 Query Input Boxes -->
+                <p class='text-node'>Transaction 2</p>
+
+                <div id='node2-query' class='node-query'>
+                <select id='node2-crud' name='node2crud' class='select-crud'>
+                    <option value='empty'></option>
+                    <option value='read'>Read</option>
+                    <option value='update'>Update</option>
+                    <option value='delete'>Delete</option>
+                </select>
+
+                <input type='search' id='node2-id' class='query-crud' name='node2id' placeholder='ID' autocomplete='off'>
+                <input type='search' id='node2-name' class='query-crud' name='node2name' placeholder='Name' autocomplete='off'>
+                <input type='search' id='node2-year' class='query-crud' name='node2year' placeholder='Year' autocomplete='off'>
+                <input type='search' id='node2-rank' class='query-crud' name='node2rank' placeholder='Rank' autocomplete='off'></input>
+                </div><br>
+
+                <!-- Node 3 Query Input Boxes-->
+                <p class='text-node'>Transaction 3</p>
                 
+                <div id='node3-query' class='node-query'>
+                <select id='node3-crud' name='node3crud' class='select-crud'>
+                    <option value='empty'></option>
+                    <option value='read'>Read</option>
+                    <option value='update'>Update</option>
+                    <option value='delete'>Delete</option>
+                </select>
+
+                <input type='search' id='node3-id' class='query-crud' name='node3id' placeholder='ID' autocomplete='off'>
+                <input type='search' id='node3-name' class='query-crud' name='node3name' placeholder='Name' autocomplete='off'>
+                <input type='search' id='node3-year' class='query-crud' name='node3year' placeholder='Year' autocomplete='off'>
+                <input type='search' id='node3-rank' class='query-crud' name='node3rank' placeholder='Rank' autocomplete='off'></input>
+                </div><br>
+
+                <p class='text-node'>Isolation Level</p>
+                <select name='isolation' id='form-isolation'>
+                    <option value='read-repeatable'>Repeatable Read</option>
+                    <option value='read-uncommitted'>Read Uncommitted</option>
+                    <option value='read-committed'>Read Committed</option>
+                    <option value='serializable'>Serializable</option>
+                </select>
             </form>
         </div>
 
         <!-- Submit Buttons -->
         <div id="div-buttons">
             <div id="alert-invalid" style="margin-bottom: 8px; display: none;"></div>
-            <button id="generate-button" class="interactive-buttons">Generate</button>
-            <button id="execute-button" class="interactive-buttons" style="display: none;">Execute</button>
+            <button id="execute-button" class="interactive-buttons">Execute</button>
         </div>
     </div>
 

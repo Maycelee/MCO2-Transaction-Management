@@ -11,21 +11,6 @@ var active2 = 0;
 var active3 = 0;
 const transactionController = {
     postQuery: function(req, res) {
-        var node_value = req.body.node;
-        var limit_value = req.body.limit;
-
-        if(limit_value === "") {
-            var query = 'SELECT * FROM movies';
-        } else {
-            var query = 'SELECT * FROM movies LIMIT ' + limit_value;
-        }
-
-        db.query(node_value, query);
-
-        res.render('main');
-    },
-
-    postMulti: function(req, res) {
         console.log("im here");
         var node1_query = {
             "crud": req.body.node1crud,
