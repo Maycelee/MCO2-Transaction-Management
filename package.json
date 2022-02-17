@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/Maycelee/MCO2-Transaction-Management#readme",
   "dependencies": {
+    "async": "^3.2.3",
     "express": "^4.17.2",
     "hbs": "^4.2.0",
     "mysql2": "^2.3.3",
