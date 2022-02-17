@@ -61,12 +61,14 @@ const transactionController = {
                     Promise.allSettled([trans.replication(node1_query),trans.replication(node2_query), trans.replication(node3_query)]).then(result => {
                         console.log("hello1");
                         trans.checkConsistency(node1_query);
-                        if(node1_query.id != node2_query.id){
-                            trans.checkConsistency(node2_query);
-                        }
-                        if((node3_query.id != node2_query.id) && (node3_query.id != node2_query.id)){
-                            trans.checkConsistency(node3_query);
-                        }
+                        trans.checkConsistency(node2_query);
+                        trans.checkConsistency(node3_query);
+                        //if(node1_query.id != node2_query.id){
+                        //    trans.checkConsistency(node2_query);
+                        //}
+                        //if((node3_query.id != node2_query.id) && (node3_query.id != node2_query.id)){
+                        //    trans.checkConsistency(node3_query);
+                        //}
                     });                                
                 });
             });
@@ -140,7 +142,7 @@ const transactionController = {
                         if(result.year >= 1980){
                             if(active3 == 1){
                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res2){
-            
+                                    console.log("test");
                                     if(res2[0]!= undefined){
                                         
                                         res2.forEach(function(result2) {
