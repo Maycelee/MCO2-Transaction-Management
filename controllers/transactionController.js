@@ -26,6 +26,7 @@ const transactionController = {
     },
 
     postMulti: function(req, res) {
+        console.log("im here");
         var node1_query = {
             "crud": req.body.node1crud,
             "id": req.body.node1id,

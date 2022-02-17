@@ -210,26 +210,6 @@ $(document).ready(function () {
             $("#alert-invalid").show();
             nodepass = false;
         }
-        //Read but Empty ID
-        if (node1_crud == "read" || node2_crud == "read" || node3_crut == "read"){
-            $("#alert-invalid").html("");
-            //Node 1
-            if (node1_crud == "read" && node1_id == "") {
-                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot READ in Node 1 when ID field is empty.</p>");
-                readpass = false;
-            } else { readpass = true; }
-            //Node 2
-            if (node2_crud == "read" && node2_id == "") {
-                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot READ in Node 2 when ID field is empty.</p>");
-                readpass = false;
-            } else { readpass = true; }
-            //Node 3
-            if (node3_crud == "read" && node3_id == "") {
-                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot READ in Node 3 when ID field is empty.</p>");
-                readpass = false;
-            } else { readpass = true; }
-            $("#alert-invalid").show();
-        }
         //Update but Empty ID
         if (node1_crud == "update" || node2_crud == "update" || node3_crud == "update"){
             $("#alert-invalid").html("");
@@ -288,10 +268,40 @@ $(document).ready(function () {
             } else { deletepass = true; }
             $("#alert-invalid").show();
         }
+
+        //Read but Empty ID
+        if (node1_crud == "read" || node2_crud == "read" || node3_crud == "read"){
+            $("#alert-invalid").html("");
+            //Node 1
+            if (node1_crud == "read" && node1_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot READ in Node 1 when ID field is empty.</p>");
+                readpass = false;
+            } else { readpass = true; }
+            //Node 2
+            if (node2_crud == "read" && node2_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot READ in Node 2 when ID field is empty.</p>");
+                readpass = false;
+            } else { readpass = true; }
+            //Node 3
+            if (node3_crud == "read" && node3_id == "") {
+                $("#alert-invalid").append("<p class='text-node' style='color: #E60000;'>Cannot READ in Node 3 when ID field is empty.</p>");
+                readpass = false;
+            } else { readpass = true; }
+            $("#alert-invalid").show();
+        }
         console.log(nodepass);
         console.log(updatepass);
         console.log(deletepass);
-        if (readpass && nodepass && updatepass && deletepass){ $("#query-form").submit(); }
+        if (readpass == true){
+            if(nodepass == true){
+                if(updatepass == true){
+                    if(deletepass == true){
+                        $("#query-form").submit();
+                    }
+                }
+            }
+
+        }
     });
 });
 
