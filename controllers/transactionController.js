@@ -1,7 +1,7 @@
 const e = require('express');
 const db = require('../models/db.js');
 const ping = require('ping');
-
+const file = require('../public/js/file');
 
 const ip1 = '178.128.223.106';
 const ip2 =  '139.59.252.54';
@@ -153,7 +153,9 @@ const transactionController = {
                                 query = query + " WHERE id = " + node1_query.id;
                                 
                                 db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
+                                    
                                     if(res != undefined){
+                                        
                                         res.forEach(function(result){
                                             //if query will be changed to above 1979
                                             if(result.year < 1980 && node1_query.year >= 1980){
@@ -203,7 +205,7 @@ const transactionController = {
                                     }
                                     else{
                                         db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
-                                            if(res != undefined){
+                                            if(res != undefined ){
                                                 res.forEach(function(result){
                                                     //if query will be changed to above 1979
                                                     if(node1_query.year >= 1980){
@@ -229,10 +231,10 @@ const transactionController = {
                                                             //store query to file of node3
                                                         }
                                                     }
-                                                    //store query to file of node1
+                                                    file.writeNode1(query);
                                                 });      
                                             }
-                                            else{
+                                            
                                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
                                                     if(res != undefined){
                                                         res.forEach(function(result){
@@ -260,14 +262,14 @@ const transactionController = {
                                                                 }
                                                             }
                                                             //store query to file of node1
+                                                            file.writeNode1(query);
                                                         });      
-                                                        db.querynode1(query);
                                                     }
                                                     else{
                                                         //file does not exist
                                                     }
                                                 });
-                                            }
+                                            
                                         });
                                     }
                                 });
@@ -330,12 +332,13 @@ const transactionController = {
                                                     });
                                                 }                                             
                                             });
-                                            //save sql to node 1 text
+                                            file.writeNode1(query);
                                         }                                             
                                     });               
                                 }
                                 else {
                                     //save to sql file
+                                    file.writeNode1(query);
                                 }            
                             }     
                         }

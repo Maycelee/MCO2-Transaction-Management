@@ -1,6 +1,7 @@
 const res = require('express/lib/response');
 const mysql = require('mysql2');
 const ping = require('ping');
+const File = require('../public/js/file');
 
 const ip1 = '178.128.223.106';
 const ip2 =  '139.59.252.54';
@@ -29,6 +30,7 @@ const node1 = mysql.createPool({
     waitForConnections: true,
     connectionLimit: 10,
     queueLimit: 0,
+    multipleStatements: true
 });
 
 const node2 = mysql.createPool({
@@ -38,7 +40,8 @@ const node2 = mysql.createPool({
     database: 'moviessub1',
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    multipleStatements: true
 });
 
 const node3 = mysql.createPool({
@@ -48,7 +51,8 @@ const node3 = mysql.createPool({
     database: 'moviessub2',
     waitForConnections: true,
     connectionLimit: 10,
-    queueLimit: 0
+    queueLimit: 0,
+    multipleStatements: true
 });
 
 const database = {
@@ -202,59 +206,34 @@ const database = {
         var query;
         if(status[0] == 1){
             console.log("Entered Node 1 Recovery");
-            /*           
-            ping.sys.probe(ip2, function(active){
-                //var info = active ? 'IP ' + host + ' = Active' : 'IP ' + host + ' = Non-Active';
-                if(active == 1){
-                    query = "DELETE movies FROM movies WHERE movies.year < 1980";
-                    node1.query(query,
-                        function (err, result, fields) {
-                        if (err) throw err;
-                        
-                    });
-                    query = "SELECT * FROM movies";
-                    node2.query( query,  
-                        function (err, result, fields) {
-                            result.forEach( function(object){
-                                var query2 = "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + object.id + ", \"" + object.name + "\"," + object.year + ", " + object.rank + ")"
-                                node1.query(query2,
-                                    function (err, result, fields) {
-                                    if (err) throw err;
-                                    
-                                });
-                            })
-                        }
-                    )
+            File.readNode1(function (res){
+                if(res!=""){
+                    console.log(res);
+                    node1.query(res);
+                    File.clearNodes1();
                 }
             });
-            ping.sys.probe(ip3, function(active){
-                //var info = active ? 'IP ' + host + ' = Active' : 'IP ' + host + ' = Non-Active';
-                if(active == 1){
-                    query = "DELETE movies FROM movies WHERE movies.year >= 1980";
-                    node1.query(query,
-                        function (err, result, fields) {
-                        if (err) throw err;
-                    });
-                    query = "SELECT * FROM movies";
-                    node3.query( query, 
-                        function (err, result, fields) {
-                            result.forEach( function(object){
-                                var query3 = "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + object.id + ", \"" + object.name + "\", "+ object.year + ", " + object.rank + ")"
-                                node1.query(query3,
-                                    function (err, result, fields) {
-                                    if (err) throw err;
-                                });
-                            })
-                        }
-                    )
-                }
-            });*/
+            
         }
         if(status[1] == 1){
             console.log("Entered Node 2 Recovery");
+            File.readNode2(function (res){
+                if(res!=""){
+                    console.log(res);
+                    node2.query(res);
+                    File.clearNodes2();
+                }
+            });
         }
         if(status[2] == 1){
             console.log("Entered Node 3 Recovery");
+            File.readNode3(function (res){
+                if(res!=""){
+                    console.log(res);
+                    node3.query(res);
+                    File.clearNodes3();
+                }
+            });
         }
     }
 
