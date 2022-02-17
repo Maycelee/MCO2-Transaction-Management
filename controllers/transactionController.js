@@ -307,7 +307,7 @@ const transactionController = {
                                     //if query will be changed to above 1979
                                     if(node1_query.year >= 1980){
                                         if(active2 == 1){
-                                            await db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                            db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                         }
                                         else{
                                             //store query to file of node2
@@ -343,7 +343,7 @@ const transactionController = {
                                         res.forEach(async function(result){
                                             if(node1_query.year < 1980){ //if query will be changed to below 1980
                                                 if(active3 == 1){
-                                                    await db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                                    db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                                 }
                                                 else {
                                                     //store query to file of node 3
