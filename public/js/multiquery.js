@@ -68,13 +68,12 @@ $(document).ready(function () {
                 "<option value='read-uncommitted'>Read Uncommitted</option>" +
                 "<option value='read-committed'>Read Committed</option>" +
                 "<option value='serializable'>Serializable</option>" +
-            "</select>" +
-
-            "<input type='numbe' id='limit-quantity' class='form-generate' name='limit' min='1' placeholder='Row Limit'>"
+            "</select>"
         );
-    
+
         $("#node1-crud").change(function() {
             var val = $(this).val();
+            console.log("HELLOOOOO");
             switch(val) {
                 case 'empty':
                     $("#node3-name").show();
@@ -184,6 +183,8 @@ $(document).ready(function () {
             }
         });
     });
+
+    
 
     $("#execute-button").click(function () {
         //Crud Dropdown

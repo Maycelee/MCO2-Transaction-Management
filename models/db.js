@@ -139,46 +139,6 @@ const database = {
         });
     },
 
-    isolationquery: function(query){
-        var ping = require('ping');
-
-        ping.sys.probe(ip1, function(active){
-            if (active == 1){
-                node1.query(query,
-                    function(err, result, fields){
-                        if (err) throw err;
-                    });
-            }
-            else {
-                //store to file
-            }
-        });
-
-        ping.sys.probe(ip2, function(active){
-            if (active == 1){
-                node2.query(query,
-                    function(err, result, fields){
-                        if (err) throw err;
-                    });
-            }
-            else {
-                //store to file
-            }
-        });
-
-        ping.sys.probe(ip3, function(active){
-            if (active == 1){
-                node3.query(query,
-                    function(err, result, fields){
-                        if (err) throw err;
-                    });
-            }
-            else {
-                //store to file
-            }
-        });
-    },
-
     //update recently reconnected node
     recover: function(status){
         var ping = require('ping');
