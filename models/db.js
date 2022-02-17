@@ -1,13 +1,14 @@
 const res = require('express/lib/response');
 const mysql = require('mysql2');
+const { promise } = require('ping');
 const ping = require('ping');
 const File = require('../public/js/file');
 
 const ip1 = '178.128.223.106';
 const ip2 =  '139.59.252.54';
 const ip3 = '167.71.211.20';
-const pooluser = 'webapp'
-const poolpass = '40654'
+const pooluser = 'webapp';
+const poolpass = '40654';
 
 ping.sys.probe(ip1, function(active){
     if(active==1)
@@ -105,8 +106,19 @@ const database = {
         } 
     },
 
-    querynode1:  function(query){
+    querynode1:async function(query){
+        return new Promise(resolve => {
+            node1.query(query);
+            setTimeout(() => {
+            }, 3000);
+            
+        }); 
+        /*
+        return await node1.getConnection().then(async conn1 =>{     
+            conn.release
+        }).then().catch(); 
         node1.query(query);
+        */
     },
 
     callnode1:  function(query, callback){
@@ -115,8 +127,13 @@ const database = {
         });
     },
 
-    querynode2: function(query){
-        node2.query(query);
+    querynode2: async function(query){
+        return new Promise(resolve => {
+            node2.query(query);
+            setTimeout(() => {
+            }, 3000);
+            
+        }); 
     },
 
     callnode2:  function(query, callback){
@@ -125,8 +142,13 @@ const database = {
         });
     },
 
-    querynode3: function(query){
-        node3.query(query);
+    querynode3: async function(query){
+        return new Promise(resolve => {
+            node3.query(query);
+            setTimeout(() => {
+            }, 3000);
+            
+        }); 
     },
 
     callnode3:  function(query, callback){

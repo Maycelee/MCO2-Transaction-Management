@@ -12,6 +12,8 @@ var active2 = 0;
 var active3 = 0;
 const transactionController = {
     postQuery: function(req, res) {
+        db.querynode3("START TRANSACTION; UPDATE movies SET  movies.year = 2001 WHERE id = 1; COMMIT;");
+
         var node1_query = {
             "crud": req.body.node1crud,
             "id": req.body.node1id,
@@ -59,16 +61,25 @@ const transactionController = {
                     trans.postIsolation(isolation, function(res){
                         res = res + "; START TRANSACTION; ";
                         var stack = [];
-                        console.log(node2_query.crud);
+
+                        //trans.replication(res, node1_query)
+                        
                         if(node1_query.crud != "empty");
                             stack.push(trans.replication(res, node1_query));
                         if(node2_query.crud != "empty");
                             stack.push(trans.replication(res, node2_query));
                         if(node3_query.crud != "empty");
                             stack.push(trans.replication(res, node3_query));
+
+                        
                         Promise.allSettled(stack).then(result => {
-                            db.callnode1("SELECT @@transaction_ISOLATION", function(res){
-                                console.log(res);
+                            db.callnode1("SELECT @@transaction_ISOLATION", function(res2){
+                                //if(node1_query.crud != "empty");
+                                    //trans.checkConsistency(res, node1_query);
+                                //if(node2_query.crud != "empty");
+                                    //trans.checkConsistency(res, node2_query);
+                                //if(node3_query.crud != "empty");
+                                    //trans.checkConsistency(res, node3_query);
                             });
                         });  
                     });
@@ -101,10 +112,11 @@ const transactionController = {
         return callback(query);
     },
 
-    checkConsistency: function(startquery, node1_query){
+    checkConsistency: async function(startquery, node1_query){
         if(active1 == 1){
             db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, function (res){
-                if(res!=undefined || res[0] != undefined){
+                if(res!=undefined){
+                if(res[0] != undefined){
                     res.forEach(function(result){
                         if(result.year < 1980){
                             if(active2 == 1){
@@ -131,7 +143,6 @@ const transactionController = {
                         if(result.year >= 1980){
                             if(active3 == 1){
                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res2){
-                                    console.log("test");
                                     if(res2[0]!= undefined){
                                         
                                         res2.forEach(function(result2) {
@@ -154,15 +165,35 @@ const transactionController = {
                         }
                     });
                 }
+                }
             });
         }
     },
 
     replication: function(startquery, node1_query){
-        console.log(node1_query);
         if(node1_query.crud != "empty"){       
             var query;
             //If the query type is READ 
+            var node1val;
+            var node2val;
+            var node3val;
+            
+            if(active1 == 1){
+                db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
+                    node1val = res;
+                });
+            }
+            if(active2 == 1){
+                db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
+                    node2val = res;
+                });
+            }
+            if(active3 == 1){
+                db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
+                    node3val = res;
+                });
+            }
+
             if(node1_query.crud == "read"){
                 query = startquery + "SELECT * FROM movies WHERE id = " + node1_query.id + "; COMMIT";    
                 if(active1 == 1){
@@ -206,19 +237,19 @@ const transactionController = {
                     
                     if(res != undefined || res[0] != undefined){
                         
-                        res.forEach(function(result){
+                        res.forEach(async function(result){
                             //if query will be changed to above 1979
                             if(result.year < 1980 && node1_query.year >= 1980){
                                 if(active2 == 1){
-                                    db.querynode2(startquery+ "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                    await db.querynode2(startquery+ "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 else{
                                     //store query to file of node2
                                     file.writeNode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 if(active3 ==1){
-                                    db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
-                                    db.querynode3(query);
+                                    await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
+                                    await db.querynode3(query);
                                 }
                                 else {//store query to file of node3
                                     file.writeNode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
@@ -227,15 +258,15 @@ const transactionController = {
                             }
                             else if(result.year >= 1980 && node1_query.year < 1980){ //if query will be changed to below 1980
                                 if(active3 == 1){
-                                    db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                    await db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 else {
                                     //store query to file of node 3
                                     file.writeNode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 if(active2 == 1){
-                                    db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
-                                    db.querynode2(query);
+                                    await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
+                                    await db.querynode2(query);
                                 }    
                                 else{
                                     //store query to file of node 2
@@ -245,16 +276,15 @@ const transactionController = {
                             }
                             else if(result.year < 1980 || node1_query.year < 1980){
                                 if(active2 == 1){
-                                    db.querynode2(query);
-                                    //console.log(query);
+                                    await db.querynode2(query);
+                                    console.log(query);
                                 }
                                 else
                                     file.writeNode2(query);
                             }  
                             else if(result.year >= 1980 || node1_query.year >= 1980){
                                 if(active3 ==1){
-                                    db.querynode3(query);
-                                    console.log(query);
+                                    console.log(await db.querynode3(query))
                                 }
                                 else //store query to file of node 3 
                                     file.writeNode3(query);
@@ -265,19 +295,19 @@ const transactionController = {
                     else{
                         db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
                             if(res != undefined || res[0] != undefined ){
-                                res.forEach(function(result){
+                                res.forEach( async function(result){
                                     //if query will be changed to above 1979
                                     if(node1_query.year >= 1980){
                                         if(active2 == 1){
-                                            db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                            await db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                         }
                                         else{
                                             //store query to file of node2
                                             file.writeNode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                         }
                                         if(active3 ==1){
-                                            db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
-                                            db.querynode3(query);
+                                            await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
+                                            await db.querynode3(query);
                                         }
                                         else {//store query to file of node3
                                             file.writeNode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
@@ -286,7 +316,7 @@ const transactionController = {
                                     }
                                     else{
                                         if(active2 == 1){
-                                            db.querynode2(query);       
+                                            await db.querynode2(query);       
                                         }
                                         else{
                                             //store query to file of node3
@@ -300,18 +330,18 @@ const transactionController = {
                             
                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
                                     if(res != undefined || res[0] != undefined){
-                                        res.forEach(function(result){
+                                        res.forEach(async function(result){
                                             if(node1_query.year < 1980){ //if query will be changed to below 1980
                                                 if(active3 == 1){
-                                                    db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                                    await db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                                 }
                                                 else {
                                                     //store query to file of node 3
                                                     file.writeNode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                                 }
                                                 if(active2 == 1){
-                                                    db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
-                                                    db.querynode2(query);
+                                                    await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
+                                                    await db.querynode2(query);
                                                 }    
                                                 else{
                                                     //store query to file of node 2
@@ -321,7 +351,7 @@ const transactionController = {
                                             }
                                             else{
                                                 if(active3 ==1){
-                                                    db.querynode3(query);       
+                                                    await db.querynode3(query);       
                                                 }
                                                 else{
                                                     //store query to file of node3
