@@ -59,23 +59,16 @@ const transactionController = {
                     var trans = require('../controllers/transactionController.js');
                     trans.postIsolation(isolation);
 
-                    trans.replication(node1_query);
-                    trans.replication(node2_query);
-                    trans.replication(node3_query);
-
-                    trans.checkConsistency(node1_query);
+                    Promise.allSettled([trans.replication(node1_query),trans.replication(node2_query), trans.replication(node3_query)]).then(result => {
+                        console.log("hello1");
+                        trans.checkConsistency(node1_query);
                         if(node1_query.id != node2_query.id){
                             trans.checkConsistency(node2_query);
                         }
                         if((node3_query.id != node2_query.id) && (node3_query.id != node2_query.id)){
                             trans.checkConsistency(node3_query);
                         }
-                    //trans.replication(node1_query);
-                    //trans.replication(node2_query);
-                    //trans.replication(node3_query);
-
-                    
-                    
+                    });                                
                 });
             });
         });
