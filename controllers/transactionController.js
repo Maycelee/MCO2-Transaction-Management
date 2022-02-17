@@ -2,7 +2,6 @@ const e = require('express');
 const db = require('../models/db.js');
 const ping = require('ping');
 const file = require('../public/js/file');
-const async = require ('async');
 
 
 const ip1 = '178.128.223.106';
@@ -140,7 +139,6 @@ const transactionController = {
                         }
                         if(result.year >= 1980){
                             if(active3 == 1){
-                                
                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res2){
             
                                     if(res2[0]!= undefined){
