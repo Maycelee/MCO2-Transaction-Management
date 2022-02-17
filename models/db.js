@@ -139,27 +139,6 @@ const database = {
         });
     },
 
-    //Multiple queries for concurrency
-    multiquery: function(node1_query, node2_query, node3_query){
-        //No concurrency yet  
-        
-        if(node2_query.crud != 'empty'){
-            node1.query(node2_query,
-                function (err, result, fields) {
-                    if (err) throw err;
-                    console.log(result);
-            });
-        }
-        
-        if(node3_query.crud != 'empty'){
-            node1.query(node3_query,
-                function (err, result, fields) {
-                    if (err) throw err;
-                    console.log(result);
-            });
-        }
-    },
-
     isolationquery: function(query){
         var ping = require('ping');
 
@@ -238,19 +217,5 @@ const database = {
     }
 
 }
-
-/**pool.getConnection(function(err) {
-    if (err) throw err;
-    console.log("Connected to host: " + pooladdress);
-    console.log("With user: " + pooluser);
-    console.log("In database: " + pooldatabase);
-});
-
-pool.query("SELECT * FROM movies LIMIT 50",
-        function (err, result, fields) {
-        if (err) throw err;
-        console.log(result);
-        console.log(fields);
-});**/
 
 module.exports = database;
