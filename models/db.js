@@ -116,9 +116,7 @@ const database = {
     },
 
     querynode2: function(query){
-        node2.query(query, function(err, result, fields){
-            return result;
-        });
+        node2.query(query);
     },
 
     callnode2:  function(query, callback){
@@ -128,9 +126,7 @@ const database = {
     },
 
     querynode3: function(query){
-        node3.query(query, function(err, result, fields){
-            return result;
-        });
+        node3.query(query);
     },
 
     callnode3:  function(query, callback){
