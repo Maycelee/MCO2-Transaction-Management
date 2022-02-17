@@ -108,9 +108,11 @@ const database = {
 
     querynode1:async function(query){
         return new Promise(resolve => {
-            node1.query(query);
-            setTimeout(() => {
-            }, 3000);
+            node1.query(query, function(err, result, fields){
+                if(err) console.log(err);
+            });
+            //setTimeout(() => {
+            //}, 3000);
             
         }); 
         /*
@@ -123,36 +125,43 @@ const database = {
 
     callnode1:  function(query, callback){
         node1.query(query, function(err, result, fields){
+            if(err) console.log(err);
             return callback(result);
         });
     },
 
     querynode2: async function(query){
         return new Promise(resolve => {
-            node2.query(query);
-            setTimeout(() => {
-            }, 3000);
+            node2.query(query, function(err, result, fields){
+                if(err) console.log(err);
+            });
+            //setTimeout(() => {
+            //}, 3000);
             
         }); 
     },
 
     callnode2:  function(query, callback){
         node2.query(query, function(err, result, fields){
+            if(err) console.log(err);
             return callback(result);
         });
     },
 
     querynode3: async function(query){
         return new Promise(resolve => {
-            node3.query(query);
-            setTimeout(() => {
-            }, 3000);
+            node3.query(query, function(err, result, fields){
+                if(err) console.log(err);
+            });
+            //setTimeout(() => {
+            //}, 3000);
             
         }); 
     },
 
     callnode3:  function(query, callback){
         node3.query(query, function(err, result, fields){
+            if(err) console.log(err);
             return callback(result);
         });
     },
