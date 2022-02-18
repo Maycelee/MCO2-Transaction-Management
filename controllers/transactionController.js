@@ -275,15 +275,18 @@ const transactionController = {
             }
 
             if(node1_query.crud == "read"){
-                query = startquery + "SELECT * FROM movies WHERE id = " + node1_query.id + "; COMMIT";    
+                query = "SELECT * FROM movies WHERE id = " + node1_query.id;    
                 if(active1 == 1){
-                    db.querynode1(query);
+                    db.readnode1(query);
                 }
                 else{
                     if(active2 == 1){
                         db.callnode2(query, function(res){
                             if(res[0] == undefined){
-                                db.querynode3(query);
+                                db.readnode3(query);
+                            }
+                            else {
+                                db.readnode2(query);
                             }
                         });
                     }

@@ -151,6 +151,30 @@ const database = {
         });
     },
 
+    readnode1: function(query){
+        node1.query("START TRANSACTION; ");
+        node1.query(query, function(err, result, fields){
+            console.log("\nREAD RESULT:\n", result);
+        });
+        node1.query("COMMIT;");
+    },
+
+    readnode2: function(query){
+        node2.query("START TRANSACTION; ");
+        node2.query(query, function(err, result, fields){
+            console.log("\nREAD RESULT:\n", result);
+        });
+        node2.query("COMMIT;");
+    },
+
+    readnode3: function(query){
+        node3.query("START TRANSACTION; ");
+        node3.query(query, function(err, result, fields){
+            console.log("\nREAD RESULT:\n", result);
+        });
+        node3.query("COMMIT;");
+    },
+
     //update recently reconnected node
     recover: function(status){
         var ping = require('ping');
