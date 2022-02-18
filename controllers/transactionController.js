@@ -72,23 +72,55 @@ const transactionController = {
 
                         
                         Promise.allSettled(stack).then(result => {
-                            db.callnode1("show variables like 'transaction_isolation'", async function(res2){
-                                await trans.sleep(3000);
-                                console.log(res2);
-                                if(node1_query.crud != "empty")
-                                    trans.checkConsistency("START TRANSACTION; ", node1_query);
-                                if(node2_query.crud != "empty"){
-                                    if(node2_query.id != node1_query.id)
-                                        trans.checkConsistency("START TRANSACTION; ", node2_query);
-                                }
-                                    
-                                if(node3_query.crud != "empty"){
-                                    if(node3_query.id != node1_query.id && node3_query.id != node2_query.id)
-                                        trans.checkConsistency("START TRANSACTION; ", node3_query);
-                                }
-                                    
-                            });
+                            console.log("\nAll transaction finished running");
                         });  
+                        db.callnode1("show variables like 'transaction_isolation'", async function(res2){
+                            await trans.sleep(3000);
+                            console.log("\n ", res2);
+                            if(node1_query.crud != "empty"){
+                                trans.checkConsistency("START TRANSACTION; ", node1_query);
+                                trans.checkConsistency("START TRANSACTION; ", node1_query);
+                                await trans.sleep(2000);
+                                db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, function(res1){
+                                db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res2){
+                                db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res3){
+                                    console.log("\n\n\n1ST TRANSACTION RESULTS for id = " + node1_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
+                                });
+                                });
+                                });
+                            }
+                                
+                            if(node2_query.crud != "empty"){
+                                if(node2_query.id != node1_query.id){
+                                    trans.checkConsistency("START TRANSACTION; ", node2_query);
+                                    trans.checkConsistency("START TRANSACTION; ", node2_query);
+                                    await trans.sleep(2000);
+                                    db.callnode1("SELECT * FROM movies WHERE id = " + node2_query.id, function(res1){
+                                    db.callnode2("SELECT * FROM movies WHERE id = " + node2_query.id, function(res2){
+                                    db.callnode3("SELECT * FROM movies WHERE id = " + node2_query.id, function(res3){
+                                        console.log("\n\n\n2ND TRANSACTION RESULTS for id = " + node2_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
+                                    });
+                                    });
+                                    });
+                                }
+                                    
+                            } 
+                            if(node3_query.crud != "empty"){
+                                if(node3_query.id != node1_query.id && node3_query.id != node2_query.id){
+                                    trans.checkConsistency("START TRANSACTION; ", node3_query);
+                                    trans.checkConsistency("START TRANSACTION; ", node3_query);
+                                    await trans.sleep(2000);
+                                    db.callnode1("SELECT * FROM movies WHERE id = " + node3_query.id, function(res1){
+                                    db.callnode2("SELECT * FROM movies WHERE id = " + node3_query.id, function(res2){
+                                    db.callnode3("SELECT * FROM movies WHERE id = " + node3_query.id, function(res3){
+                                        console.log("\n\n\n3RD TRANSACTION RESULTS for id = " + node3_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
+                                    });
+                                    });
+                                    });
+                                }     
+                            }
+                            
+                        });
                     });
                     
                                                   
@@ -139,7 +171,6 @@ const transactionController = {
     },
 
     checkConsistency: function(startquery, node1_query){
-        console.log(node1_query);
         if(active1 == 1){
             db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, async function (res){
                 if(res!=undefined){
@@ -153,7 +184,7 @@ const transactionController = {
                                             if((result.name != result2.name) || (result.year != result2.year) || (result.rank != result2.year)){
                                                 query = startquery + "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id;
                                                 db.querynode2(query);
-                                                await db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                                db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                             }                                        
                                         });
                                     }
@@ -163,6 +194,7 @@ const transactionController = {
                                         else
                                             file.writeNode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
 
+                                        db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                         await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
                                     }
                                 });
@@ -177,7 +209,7 @@ const transactionController = {
                                             if((result.name != result2.name) || (result.year != result2.year) || (result.rank != result2.year)){
                                                 query = startquery +  "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id + "; COMMIT;";
                                                 db.querynode3(query);
-                                                await db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                                db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                             }                                        
                                         });
                                     }
@@ -187,7 +219,8 @@ const transactionController = {
                                         else
                                             await file.writeNode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
 
-                                        db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
+                                        db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                        await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
                                     }
                                 });
                             }

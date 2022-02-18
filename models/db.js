@@ -58,21 +58,21 @@ const node3 = mysql.createPool({
 
 const database = {
     // create the connection to database
-    connect: function() {
+    connect: async function() {
         
-        node1.getConnection(function (err) {
+        node1.promise().getConnection(function (err) {
             //if(err) throw err;
             if(err) console.log("Unable to connect to Node 1");
             else console.log("Node 1: Connection Successful.");
         });
 
-        node2.getConnection(function (err) {
+        node2.promise().getConnection(function (err) {
             //if (err) throw err;
             if(err) console.log("Unable to connect to Node 2");
             else console.log("Node 2: Connection Successful.");
         });
 
-        node3.getConnection(function (err) {
+        node3.promise().getConnection(function (err) {
             //if (err) throw err;
             if(err) console.log("Unable to connect to Node 3");
             else console.log("Node 3: Connection Successful.");
@@ -109,14 +109,14 @@ const database = {
     querynode1:async function(query){
         return new Promise(resolve => {
             node1.query(query, function(err, result, fields){
-                if(err) console.log(err);
+                //if(err) console.log(err);
             });          
         }); 
     },
 
     callnode1:  function(query, callback){
         node1.query(query, function(err, result, fields){
-            if(err) console.log(err);
+            //if(err) console.log(err);
             return callback(result);
         });
     },
@@ -124,14 +124,14 @@ const database = {
     querynode2: async function(query){
         return new Promise(resolve => {
             node2.query(query, function(err, result, fields){
-                if(err) console.log(err);
+                //if(err) console.log(err);
             }); 
         }); 
     },
 
     callnode2:  function(query, callback){
         node2.query(query, function(err, result, fields){
-            if(err) console.log(err);
+            //if(err) console.log(err);
             return callback(result);
         });
     },
@@ -139,14 +139,14 @@ const database = {
     querynode3: async function(query){
         return new Promise(resolve => {
             node3.query(query, function(err, result, fields){
-                if(err) console.log(err);
+                
             });
         }); 
     },
 
     callnode3:  function(query, callback){
         node3.query(query, function(err, result, fields){
-            if(err) console.log(err);
+            //if(err) console.log(err);
             return callback(result);
         });
     },
