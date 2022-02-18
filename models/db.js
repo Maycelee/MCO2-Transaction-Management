@@ -110,17 +110,8 @@ const database = {
         return new Promise(resolve => {
             node1.query(query, function(err, result, fields){
                 if(err) console.log(err);
-            });
-            //setTimeout(() => {
-            //}, 3000);
-            
+            });          
         }); 
-        /*
-        return await node1.getConnection().then(async conn1 =>{     
-            conn.release
-        }).then().catch(); 
-        node1.query(query);
-        */
     },
 
     callnode1:  function(query, callback){
@@ -134,10 +125,7 @@ const database = {
         return new Promise(resolve => {
             node2.query(query, function(err, result, fields){
                 if(err) console.log(err);
-            });
-            //setTimeout(() => {
-            //}, 3000);
-            
+            }); 
         }); 
     },
 
@@ -153,9 +141,6 @@ const database = {
             node3.query(query, function(err, result, fields){
                 if(err) console.log(err);
             });
-            //setTimeout(() => {
-            //}, 3000);
-            
         }); 
     },
 

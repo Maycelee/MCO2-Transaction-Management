@@ -12,7 +12,7 @@ var active2 = 0;
 var active3 = 0;
 const transactionController = {
     postQuery: function(req, res) {
-        db.querynode3("START TRANSACTION; UPDATE movies SET  movies.year = 2001 WHERE id = 1; COMMIT;");
+        //db.querynode3("START TRANSACTION; UPDATE movies SET  movies.year = 2001 WHERE id = 1; COMMIT;");
 
         var node1_query = {
             "crud": req.body.node1crud,
@@ -37,7 +37,6 @@ const transactionController = {
             "year": req.body.node3year,
             "rank": req.body.node3rank
         };
-        //db.connect;
         var isolation = req.body.isolation;
         var trans = require('../controllers/transactionController.js');
         ping.sys.probe(ip1, function(activen1){
@@ -58,11 +57,11 @@ const transactionController = {
                         active3 = 0;
                     }
                     var trans = require('../controllers/transactionController.js');
-                    trans.postIsolation(isolation, function(res){
-                        res = res + "; START TRANSACTION; ";
+                    db.connect;
+                    trans.postIsolation(isolation, async function(res){
+                        await trans.sleep(1000);
+                        res = "START TRANSACTION; ";
                         var stack = [];
-
-                        //trans.replication(res, node1_query)
                         
                         if(node1_query.crud != "empty");
                             stack.push(trans.replication(res, node1_query));
@@ -73,15 +72,21 @@ const transactionController = {
 
                         
                         Promise.allSettled(stack).then(result => {
-                            db.callnode1("SELECT @@transaction_ISOLATION", async function(res2){
+                            db.callnode1("show variables like 'transaction_isolation'", async function(res2){
                                 await trans.sleep(3000);
                                 console.log(res2);
                                 if(node1_query.crud != "empty")
                                     trans.checkConsistency("START TRANSACTION; ", node1_query);
-                                if(node2_query.crud != "empty")
-                                    trans.checkConsistency("START TRANSACTION; ", node2_query);
-                                if(node3_query.crud != "empty")
-                                    trans.checkConsistency("START TRANSACTION; ", node3_query);
+                                if(node2_query.crud != "empty"){
+                                    if(node2_query.id != node1_query.id)
+                                        trans.checkConsistency("START TRANSACTION; ", node2_query);
+                                }
+                                    
+                                if(node3_query.crud != "empty"){
+                                    if(node3_query.id != node1_query.id && node3_query.id != node2_query.id)
+                                        trans.checkConsistency("START TRANSACTION; ", node3_query);
+                                }
+                                    
                             });
                         });  
                     });
@@ -95,21 +100,40 @@ const transactionController = {
     },
 
     postIsolation: function(level, callback){
-        var query = "SET TRANSACTION ISOLATION LEVEL ";
+        var query = "SET transaction_isolation = ";
         if(level == "read-repeatable"){
-            query = query + "REPEATABLE READ";
+            query = query + "'REPEATABLE-READ'";
         }
         else if(level == "read-uncommitted"){
-            query = query + "READ UNCOMMITTED";
+            query = query + "'READ-UNCOMMITTED'";
         }
         else if(level == "read-committed"){
-            query = query + "READ COMMITTED";
+            query = query + "'READ-COMMITTED'";
             console.log("yes");
         }
         else if(level == "serializable"){
-            query = query + "SERIALIZABLE";
+            query = query + "'SERIALIZABLE'";
         }
         //console.log(query);
+        if(active1 == 1){
+            db.querynode1(query);
+        }
+        else{
+            file.writeNode1(query + ";");
+        }
+        if(active2 == 1){
+            db.querynode2(query);
+        }
+        else{
+            file.writeNode2(query + ";");
+        }
+        if(active3 == 1){
+            db.querynode3(query);
+        }
+        else{
+            file.writeNode3(query + ";");
+        }
+
         
         return callback(query);
     },
@@ -129,6 +153,7 @@ const transactionController = {
                                             if((result.name != result2.name) || (result.year != result2.year) || (result.rank != result2.year)){
                                                 query = startquery + "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id;
                                                 db.querynode2(query);
+                                                await db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                             }                                        
                                         });
                                     }
@@ -152,6 +177,7 @@ const transactionController = {
                                             if((result.name != result2.name) || (result.year != result2.year) || (result.rank != result2.year)){
                                                 query = startquery +  "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id + "; COMMIT;";
                                                 db.querynode3(query);
+                                                await db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                             }                                        
                                         });
                                     }
@@ -244,7 +270,6 @@ const transactionController = {
                             //if query will be changed to above 1979
                             if(result.year < 1980 && node1_query.year >= 1980){
                                 if(active2 == 1){
-                                    console.log("heeee");
                                     db.querynode2(startquery+ "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 else{
@@ -252,11 +277,10 @@ const transactionController = {
                                     file.writeNode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 if(active3 ==1){
-                                    console.log("hiiii");
+                                  
                                     setTimeout(() => {  
                                     }, 3000);
                                     await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;" + query);
-                                    //await db.querynode3(query);
                                 }
                                 else {//store query to file of node3
                                     file.writeNode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
@@ -265,7 +289,7 @@ const transactionController = {
                             }
                             else if(result.year >= 1980 && node1_query.year < 1980){ //if query will be changed to below 1980
                                 if(active3 == 1){
-                                    console.log("haaaaa");
+                                  
                                     db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                 }
                                 else {
@@ -274,7 +298,7 @@ const transactionController = {
                                 }
                                 if(active2 == 1){
                                     //store query to file of node 2
-                                    console.log("hiiii");
+                                   
                                     setTimeout(() => {  
                                     }, 3000);
                                     await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT; " + query);
@@ -288,14 +312,13 @@ const transactionController = {
                             else if(result.year < 1980 || node1_query.year < 1980){
                                 if(active2 == 1){
                                     await db.querynode2(query);
-                                    console.log(query);
                                 }
                                 else
                                     file.writeNode2(query);
                             }  
                             else if(result.year >= 1980 || node1_query.year >= 1980){
                                 if(active3 ==1){
-                                    console.log(await db.querynode3(query))
+                                    await db.querynode3(query);
                                 }
                                 else //store query to file of node 3 
                                     file.writeNode3(query);
@@ -320,7 +343,6 @@ const transactionController = {
                                             setTimeout(() => {  
                                             }, 3000);
                                             await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;" + query);
-                                            //await db.querynode3(query);
                                         }
                                         else {//store query to file of node3
                                             file.writeNode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
@@ -356,7 +378,6 @@ const transactionController = {
                                                     setTimeout(() => {  
                                                     }, 3000);
                                                     await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;" + query);
-                                                    //await db.querynode2(query);
                                                 }    
                                                 else{
                                                     //store query to file of node 2
