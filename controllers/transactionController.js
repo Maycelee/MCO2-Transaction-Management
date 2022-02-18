@@ -467,9 +467,9 @@ const transactionController = {
                         if(res != undefined || res[0] != undefined){
                             res.forEach(async function(result){
                                 if(result.year < 1980){
-                                    await db.querynode1(query);
+                                    db.querynode1(query);
                                     if(active2 == 1){
-                                        db.querynode2(query);
+                                        await db.querynode2(query);
                                     }
                                     else{
                                         //save to sql file
@@ -477,9 +477,9 @@ const transactionController = {
                                     }
                                 }
                                 if(result.year >= 1980){
-                                    await db.querynode1(query);
+                                    db.querynode1(query);
                                     if(active3 == 1){
-                                        db.querynode3(query);
+                                        await db.querynode3(query);
                                     }
                                     else{
                                         //save to sql file
