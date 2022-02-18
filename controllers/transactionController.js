@@ -2,7 +2,6 @@ const e = require('express');
 const db = require('../models/db.js');
 const ping = require('ping');
 const file = require('../public/js/file');
-const { system } = require('nodemon/lib/config');
 
 const ip1 = '178.128.223.106';
 const ip2 =  '139.59.252.54';
@@ -75,53 +74,58 @@ const transactionController = {
                         Promise.allSettled(stack).then(result => {
                             console.log("\nAll transaction finished running");
                         });  
-                        db.callnode1("show variables like 'transaction_isolation'", async function(res2){
                             await trans.sleep(3000);
-                            console.log("\n ", res2);
                             if(node1_query.crud != "empty"){
-                                trans.checkConsistency("START TRANSACTION; ", node1_query);
-                                trans.checkConsistency("START TRANSACTION; ", node1_query);
-                                await trans.sleep(2000);
-                                db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, function(res1){
-                                db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res2){
-                                db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res3){
-                                    console.log("\n\n\nTRANSACTION RESULTS for id = " + node1_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
-                                });
-                                });
-                                });
-                            }
+                                if(active1 == 1 && active2 == 1 && active3 == 1){
+                                    trans.checkConsistency("START TRANSACTION; ", node1_query);
+                                    trans.checkConsistency("START TRANSACTION; ", node1_query);
                                 
-                            if(node2_query.crud != "empty"){
-                                if(node2_query.id != node1_query.id){
-                                    trans.checkConsistency("START TRANSACTION; ", node2_query);
-                                    trans.checkConsistency("START TRANSACTION; ", node2_query);
                                     await trans.sleep(2000);
-                                    db.callnode1("SELECT * FROM movies WHERE id = " + node2_query.id, function(res1){
-                                    db.callnode2("SELECT * FROM movies WHERE id = " + node2_query.id, function(res2){
-                                    db.callnode3("SELECT * FROM movies WHERE id = " + node2_query.id, function(res3){
-                                        console.log("\n\n\nTRANSACTION RESULTS for id = " + node2_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
-                                    });
-                                    });
-                                    });
-                                }
-                                    
-                            } 
-                            if(node3_query.crud != "empty"){
-                                if(node3_query.id != node1_query.id && node3_query.id != node2_query.id){
-                                    trans.checkConsistency("START TRANSACTION; ", node3_query);
-                                    trans.checkConsistency("START TRANSACTION; ", node3_query);
-                                    await trans.sleep(2000);
-                                    db.callnode1("SELECT * FROM movies WHERE id = " + node3_query.id, function(res1){
-                                    db.callnode2("SELECT * FROM movies WHERE id = " + node3_query.id, function(res2){
-                                    db.callnode3("SELECT * FROM movies WHERE id = " + node3_query.id, function(res3){
-                                        console.log("\n\n\nTRANSACTION RESULTS for id = " + node3_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
+                                    db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, function(res1){
+                                    db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res2){
+                                    db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res3){
+                                        console.log("\n\n\nTRANSACTION RESULTS for id = " + node1_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
                                     });
                                     });
                                     });
                                 }     
                             }
-                            
-                        });
+                                
+                            if(node2_query.crud != "empty"){
+                                if(node2_query.id != node1_query.id){
+                                    if(active == 1 && active2 == 1 && active3 == 1){
+                                        trans.checkConsistency("START TRANSACTION; ", node2_query);
+                                        trans.checkConsistency("START TRANSACTION; ", node2_query);
+                                        await trans.sleep(2000);
+                                        db.callnode1("SELECT * FROM movies WHERE id = " + node2_query.id, function(res1){
+                                        db.callnode2("SELECT * FROM movies WHERE id = " + node2_query.id, function(res2){
+                                        db.callnode3("SELECT * FROM movies WHERE id = " + node2_query.id, function(res3){
+                                            console.log("\n\n\nTRANSACTION RESULTS for id = " + node2_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
+                                        });
+                                        });
+                                        });
+                                    }
+                                    
+                                }
+                                    
+                            } 
+                            if(node3_query.crud != "empty"){
+                                if(node3_query.id != node1_query.id && node3_query.id != node2_query.id){
+                                    if(active1 == 1 && active2 == 1 && active3 == 1){
+                                    trans.checkConsistency("START TRANSACTION; ", node3_query);
+                                    trans.checkConsistency("START TRANSACTION; ", node3_query);
+                                    await trans.sleep(2000);       
+                                        db.callnode1("SELECT * FROM movies WHERE id = " + node3_query.id, function(res1){
+                                        db.callnode2("SELECT * FROM movies WHERE id = " + node3_query.id, function(res2){
+                                        db.callnode3("SELECT * FROM movies WHERE id = " + node3_query.id, function(res3){
+                                            console.log("\n\n\nTRANSACTION RESULTS for id = " + node3_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
+                                        });
+                                        });
+                                        });
+                                    }
+                                    
+                                }     
+                            }
                     });                              
                 });
             });
@@ -257,26 +261,6 @@ const transactionController = {
         if(node1_query.crud != "empty"){       
             var query;
             //If the query type is READ 
-            var node1val;
-            var node2val;
-            var node3val;
-            
-            if(active1 == 1){
-                db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
-                    node1val = res;
-                });
-            }
-            if(active2 == 1){
-                db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
-                    node2val = res;
-                });
-            }
-            if(active3 == 1){
-                db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
-                    node3val = res;
-                });
-            }
-
             if(node1_query.crud == "read"){
                 query = "SELECT * FROM movies WHERE id = " + node1_query.id;    
                 if(active1 == 1){
@@ -320,8 +304,7 @@ const transactionController = {
                 query = query + " WHERE id = " + node1_query.id + "; COMMIT;";
                 
                 db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id , function(res){
-                    
-                    if(res != undefined || res[0] != undefined){
+                    if(res != undefined){
                         
                         res.forEach(async function(result){
                             //if query will be changed to above 1979
@@ -385,8 +368,11 @@ const transactionController = {
                     }
                     else{
                         db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
-                            if(res != undefined || res[0] != undefined ){
-                                res.forEach( async function(result){
+                            
+                            if(res != undefined){
+                                //store query to file of node 1
+                                file.writeNode1(query);
+                                res.forEach( async function(result){                     
                                     //if query will be changed to above 1979
                                     if(node1_query.year >= 1980){
                                         if(active2 == 1){
@@ -414,14 +400,14 @@ const transactionController = {
                                             //store query to file of node3
                                             file.writeNode2(query);
                                         }
-                                    }
-                                    //store query to file of node 1
-                                    file.writeNode1(query);
+                                    }                                                                                            
                                 });      
                             }
                             
                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
-                                    if(res != undefined || res[0] != undefined){
+                                    if(res != undefined){
+                                        //store query to file of node1
+                                        file.writeNode1(query);
                                         res.forEach(async function(result){
                                             if(node1_query.year < 1980){ //if query will be changed to below 1980
                                                 if(active3 == 1){
@@ -450,9 +436,7 @@ const transactionController = {
                                                     //store query to file of node3
                                                     file.writeNode3(query);
                                                 }
-                                            }
-                                            //store query to file of node1
-                                            file.writeNode1(query);
+                                            }   
                                         });      
                                     }
                                     else{
@@ -467,7 +451,6 @@ const transactionController = {
             //delete function
             if(node1_query.crud == "delete"){
                 var query = startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;";
-
                 if(active1 == 1){
                     db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, function(res){
                         if(res != undefined || res[0] != undefined){

@@ -4,19 +4,19 @@ const fs = require('fs');
 const file = {
     writeNode1: function(query){
         var stream = fs.createWriteStream("public/node1.txt", {flags:'a'});
-        stream.write(query + ";\n");
+        stream.write(query + "\n");
         console.log(new Date().toISOString());
     },
 
     writeNode2: function(query){
         var stream = fs.createWriteStream("public/node2.txt", {flags:'a'});
-        stream.write(query + ";\n");
+        stream.write(query + "\n");
         console.log(new Date().toISOString());
     },
 
     writeNode3: function(query){
         var stream = fs.createWriteStream("public/node3.txt", {flags:'a'});
-        stream.write(query + ";\n");
+        stream.write(query + "\n");
         console.log(new Date().toISOString());
     },
 
