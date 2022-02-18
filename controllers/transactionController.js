@@ -57,7 +57,8 @@ const transactionController = {
                         active3 = 0;
                     }
                     var trans = require('../controllers/transactionController.js');
-                    db.connect;
+                    //db.connect;
+                    //trans.sleep(10000);
                     trans.postIsolation(isolation, async function(res){
                         await trans.sleep(1000);
                         res = "START TRANSACTION; ";
@@ -129,21 +130,21 @@ const transactionController = {
         res.render('main');
     },
 
-    postIsolation: function(level, callback){
-        var query = "SET transaction_isolation = ";
+    postIsolation: async function(level, callback){
+        var query = "SET GLOBAL transaction_isolation = ";
         if(level == "read-repeatable"){
-            query = query + "'REPEATABLE-READ'";
+            query = query + "'REPEATABLE-READ';";
         }
         else if(level == "read-uncommitted"){
             
-            query = query + "'READ-UNCOMMITTED'";
+            query = query + "'READ-UNCOMMITTED';";
         }
         else if(level == "read-committed"){
-            query = query + "'READ-COMMITTED'";
+            query = query + "'READ-COMMITTED';";
             
         }
         else if(level == "serializable"){
-            query = query + "'SERIALIZABLE'";
+            query = query + "'SERIALIZABLE';";
             
         }
         console.log(query);

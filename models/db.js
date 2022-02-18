@@ -109,14 +109,14 @@ const database = {
     querynode1:async function(query){
         return new Promise(resolve => {
             node1.query(query, function(err, result, fields){
-                //if(err) console.log(err);
+                if(err) console.log(err);
             });          
         }); 
     },
 
     callnode1:  function(query, callback){
         node1.query(query, function(err, result, fields){
-            //if(err) console.log(err);
+            if(err) console.log(err);
             return callback(result);
         });
     },
@@ -124,14 +124,14 @@ const database = {
     querynode2: async function(query){
         return new Promise(resolve => {
             node2.query(query, function(err, result, fields){
-                //if(err) console.log(err);
+                if(err) console.log(err);
             }); 
         }); 
     },
 
     callnode2:  function(query, callback){
         node2.query(query, function(err, result, fields){
-            //if(err) console.log(err);
+            if(err) console.log(err);
             return callback(result);
         });
     },
@@ -139,14 +139,14 @@ const database = {
     querynode3: async function(query){
         return new Promise(resolve => {
             node3.query(query, function(err, result, fields){
-                //if(err) console.log(err);
+                if(err) console.log(err);
             });
         }); 
     },
 
     callnode3:  function(query, callback){
         node3.query(query, function(err, result, fields){
-            //if(err) console.log(err);
+            if(err) console.log(err);
             return callback(result);
         });
     },
