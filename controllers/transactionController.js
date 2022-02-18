@@ -152,19 +152,19 @@ const transactionController = {
             db.querynode1(query);
         }
         else{
-            file.writeNode1(query + ";");
+            file.writeNode1(query);
         }
         if(active2 == 1){
             db.querynode2(query);
         }
         else{
-            file.writeNode2(query + ";");
+            file.writeNode2(query);
         }
         if(active3 == 1){
             db.querynode3(query);
         }
         else{
-            file.writeNode3(query + ";");
+            file.writeNode3(query);
         }
 
         
