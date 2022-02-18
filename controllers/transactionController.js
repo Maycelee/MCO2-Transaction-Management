@@ -181,6 +181,7 @@ const transactionController = {
                                 db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, async function(res2){
                                     if(res2[0]!= undefined){
                                         res2.forEach(async function(result2) {
+                                            
                                             if(result.name != result2.name || result.year != result2.year || result.rank != result2.rank){
                                                 console.log("Updated Inconsistency in Node 2");
                                                 query = startquery + "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id;
@@ -214,6 +215,7 @@ const transactionController = {
                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, async function(res2){
                                     if(res2[0]!= undefined){
                                         res2.forEach(async function(result2) {
+                                            
                                             if(result.name != result2.name || result.year != result2.year || result.rank != result2.rank){
                                                 query = startquery +  "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id + "; COMMIT;";
                                                 Promise.allSettled([db.querynode3(query)]).then( val => {
@@ -231,7 +233,7 @@ const transactionController = {
                                             db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                         }   
                                         else
-                                            await file.writeNode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                            file.writeNode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                             
                                         Promise.allSettled([db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;")]).then(val => {
                                         }); 
