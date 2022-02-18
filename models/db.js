@@ -60,19 +60,19 @@ const database = {
     // create the connection to database
     connect: async function() {
         
-        node1.promise().getConnection(function (err) {
+        node1.getConnection(function (err) {
             //if(err) throw err;
             if(err) console.log("Unable to connect to Node 1");
             else console.log("Node 1: Connection Successful.");
         });
 
-        node2.promise().getConnection(function (err) {
+        node2.getConnection(function (err) {
             //if (err) throw err;
             if(err) console.log("Unable to connect to Node 2");
             else console.log("Node 2: Connection Successful.");
         });
 
-        node3.promise().getConnection(function (err) {
+        node3.getConnection(function (err) {
             //if (err) throw err;
             if(err) console.log("Unable to connect to Node 3");
             else console.log("Node 3: Connection Successful.");
