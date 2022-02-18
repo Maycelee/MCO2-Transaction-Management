@@ -84,7 +84,7 @@ const transactionController = {
                                 db.callnode1("SELECT * FROM movies WHERE id = " + node1_query.id, function(res1){
                                 db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, function(res2){
                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, function(res3){
-                                    console.log("\n\n\n1ST TRANSACTION RESULTS for id = " + node1_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
+                                    console.log("\n\n\nTRANSACTION RESULTS for id = " + node1_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
                                 });
                                 });
                                 });
@@ -98,7 +98,7 @@ const transactionController = {
                                     db.callnode1("SELECT * FROM movies WHERE id = " + node2_query.id, function(res1){
                                     db.callnode2("SELECT * FROM movies WHERE id = " + node2_query.id, function(res2){
                                     db.callnode3("SELECT * FROM movies WHERE id = " + node2_query.id, function(res3){
-                                        console.log("\n\n\n2ND TRANSACTION RESULTS for id = " + node2_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
+                                        console.log("\n\n\nTRANSACTION RESULTS for id = " + node2_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
                                     });
                                     });
                                     });
@@ -113,7 +113,7 @@ const transactionController = {
                                     db.callnode1("SELECT * FROM movies WHERE id = " + node3_query.id, function(res1){
                                     db.callnode2("SELECT * FROM movies WHERE id = " + node3_query.id, function(res2){
                                     db.callnode3("SELECT * FROM movies WHERE id = " + node3_query.id, function(res3){
-                                        console.log("\n\n\n3RD TRANSACTION RESULTS for id = " + node3_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
+                                        console.log("\n\n\nTRANSACTION RESULTS for id = " + node3_query.id + "\n\nNode 1 contains: ",  res1[0] ,"\nNode 2 contains: " , res2[0] , "\nNode 3 contains: " , res3[0]);
                                     });
                                     });
                                     });
@@ -134,19 +134,22 @@ const transactionController = {
     postIsolation: function(level, callback){
         var query = "SET transaction_isolation = ";
         if(level == "read-repeatable"){
+            console.log("1");
             query = query + "'REPEATABLE-READ'";
         }
         else if(level == "read-uncommitted"){
+            console.log("2");
             query = query + "'READ-UNCOMMITTED'";
         }
         else if(level == "read-committed"){
             query = query + "'READ-COMMITTED'";
-            console.log("yes");
+            console.log("3");
         }
         else if(level == "serializable"){
             query = query + "'SERIALIZABLE'";
+            console.log("4");
         }
-        //console.log(query);
+        console.log(query);
         if(active1 == 1){
             db.querynode1(query);
         }
