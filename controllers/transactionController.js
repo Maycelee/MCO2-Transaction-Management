@@ -121,9 +121,7 @@ const transactionController = {
                             }
                             
                         });
-                    });
-                    
-                                                  
+                    });                              
                 });
             });
         });
@@ -134,20 +132,19 @@ const transactionController = {
     postIsolation: function(level, callback){
         var query = "SET transaction_isolation = ";
         if(level == "read-repeatable"){
-            console.log("1");
             query = query + "'REPEATABLE-READ'";
         }
         else if(level == "read-uncommitted"){
-            console.log("2");
+            
             query = query + "'READ-UNCOMMITTED'";
         }
         else if(level == "read-committed"){
             query = query + "'READ-COMMITTED'";
-            console.log("3");
+            
         }
         else if(level == "serializable"){
             query = query + "'SERIALIZABLE'";
-            console.log("4");
+            
         }
         console.log(query);
         if(active1 == 1){
@@ -184,21 +181,30 @@ const transactionController = {
                                 db.callnode2("SELECT * FROM movies WHERE id = " + node1_query.id, async function(res2){
                                     if(res2[0]!= undefined){
                                         res2.forEach(async function(result2) {
-                                            if((result.name != result2.name) || (result.year != result2.year) || (result.rank != result2.year)){
+                                            if(result.name != result2.name || result.year != result2.year || result.rank != result2.rank){
+                                                console.log("Updated Inconsistency in Node 2");
                                                 query = startquery + "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id;
-                                                db.querynode2(query);
+                                                Promise.allSettled([db.querynode2(query)]).then(val => {
+                                                });
                                                 db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
                                             }                                        
                                         });
                                     }
                                     else {
-                                        if(active3 == 1)
+                                        if(active3 == 1){
+                                            console.log("Removed Inconsistency in Node 3");
                                             db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                        }
+                                        
                                         else
                                             file.writeNode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
 
-                                        db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
-                                        await db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
+                                            console.log("Updated Inconsistency In Node 2");
+                                        Promise.allSettled([db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;")]).then(val => {
+                                            
+                                        });
+                                        db.querynode2(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
+                                        
                                     }
                                 });
                             }
@@ -207,23 +213,30 @@ const transactionController = {
                             if(active3 == 1){
                                 db.callnode3("SELECT * FROM movies WHERE id = " + node1_query.id, async function(res2){
                                     if(res2[0]!= undefined){
-                                        
                                         res2.forEach(async function(result2) {
-                                            if((result.name != result2.name) || (result.year != result2.year) || (result.rank != result2.year)){
+                                            if(result.name != result2.name || result.year != result2.year || result.rank != result2.rank){
                                                 query = startquery +  "UPDATE movies SET movies.name = \"" + result.name + "\", movies.year = " + result.year + ", movies.rank = " + result.rank + " WHERE id = " + result.id + "; COMMIT;";
-                                                db.querynode3(query);
+                                                Promise.allSettled([db.querynode3(query)]).then( val => {
+                                                    
+                                                });
+                                                console.log("Updated Inconsistency From Node 3");
                                                 db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                                console.log("Removed Inconsistency From Node 2");
                                             }                                        
                                         });
                                     }
                                     else {
-                                        if(active2 == 1)
+                                        if(active2 == 1){
+                                            console.log("Removed Inconsistency From Node 2");
                                             db.querynode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
+                                        }   
                                         else
                                             await file.writeNode2(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
-
-                                        db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;");
-                                        await db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
+                                            
+                                        Promise.allSettled([db.querynode3(startquery + "DELETE movies FROM movies WHERE id = " + node1_query.id + "; COMMIT;")]).then(val => {
+                                        }); 
+                                        db.querynode3(startquery + "INSERT INTO movies (movies.id, movies.name, movies.year, movies.rank) VALUES (" + result.id + ", \"" + result.name + "\", "+ result.year + ", " + result.rank + "); COMMIT;");
+                                        console.log("Updated Inconsistency From Node 3");
                                     }
                                 });
                             }
